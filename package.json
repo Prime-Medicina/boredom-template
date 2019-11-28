@@ -1,0 +1,26 @@
+{
+  "name": "juriscloud-backend",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "preinstall": "npx submodules-install",
+    "build": "npm install && npm run build:backend && npm run build:frontend",
+    "build:frontend": "cd frontend && npm install && npm run build",
+    "build:backend": "sls webpack --out backend/dist",
+    "deploy": "npm run build && npm run deploy:development",
+    "deploy:frontend": "sls client deploy",
+    "deploy:backend": "sls deploy",
+    "deploy:development": "cross-env-shell NODE_ENV=development \"npm run deploy:backend -- -s development && npm run deploy:frontend -- -s development\"",
+    "deploy:production": "cross-env-shell NODE_ENV=production \"npm run deploy:backend -- -s production && npm run deploy:frontend -- -s production\""
+  },
+  "devDependencies": {
+    "cross-env": "^6.0.3",
+    "eslint": "^6.7.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "serverless-finch": "^2.4.3",
+    "serverless-offline": "^5.12.0",
+    "serverless-webpack": "^5.3.1",
+    "webpack": "^4.41.2"
+  }
+}

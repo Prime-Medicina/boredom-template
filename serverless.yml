@@ -1,0 +1,45 @@
+service: juriscloud
+app: juriscloud
+org: rodrigogs
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  - serverless-finch
+
+custom:
+  webpack:
+    webpackConfig: 'backend/webpack.config.js'
+  client:
+    bucketName: 'juriscloud-webapp'
+    distributionFolder: 'frontend/dist'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  region: sa-east-1
+  versionFunctions: false
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - "logs:*"
+      Resource: "*"
+  profile: 'rodrigogs'
+
+functions:
+  healthcheck:
+    handler: backend/functions/api/healthcheck.handler
+    events:
+      - http:
+          method: get
+          path: /
+          cors: true
+
+  fail:
+    handler: backend/functions/api/fail.handler
+    events:
+      - http:
+          method: get
+          path: /fail/{status}/{message}
+          cors: true
