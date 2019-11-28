@@ -8,7 +8,7 @@
     "build:frontend": "cd frontend && npm install && npm run build",
     "build:backend": "sls webpack --out backend/dist",
     "deploy": "npm run build:frontend && npm run deploy:development",
-    "deploy:frontend": "sls client deploy",
+    "deploy:frontend": "sls client deploy --no-confirm",
     "deploy:backend": "sls deploy",
     "deploy:development": "cross-env-shell NODE_ENV=development \"npm run deploy:backend -- -s development && npm run deploy:frontend -- -s development\"",
     "deploy:production": "cross-env-shell NODE_ENV=production \"npm run deploy:backend -- -s production && npm run deploy:frontend -- -s production\""

@@ -1,12 +1,29 @@
 <template>
   <div id="app">
     <div id="nav">
+      {{ healthCheck }}
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>
     <router-view/>
   </div>
 </template>
+
+<script>
+import { API_URL } from './config';
+
+export default {
+  name: 'App',
+
+  async created() {
+    this.healthCheck = await fetch(API_URL).then(response => response.json());
+  },
+
+  data: () => ({
+    healthCheck: null,
+  }),
+};
+</script>
 
 <style>
 #app {
