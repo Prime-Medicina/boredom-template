@@ -1,27 +1,23 @@
 <template>
   <div id="app">
-    <div id="nav">
-      {{ healthCheck }}
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <img src="./assets/logo.png">
+    <div>
+      <p>
+        If Element is successfully added to this project, you'll see an
+        <code v-text="'<el-button>'"></code>
+        below
+      </p>
+      <el-button>el-button</el-button>
     </div>
-    <router-view/>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import { API_URL } from './config';
-
 export default {
-  name: 'App',
-
-  async created() {
-    this.healthCheck = await fetch(API_URL).then(response => response.json());
+  name: 'app',
+  components: {
   },
-
-  data: () => ({
-    healthCheck: null,
-  }),
 };
 </script>
 
@@ -32,18 +28,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+  margin-top: 60px;
 }
 </style>

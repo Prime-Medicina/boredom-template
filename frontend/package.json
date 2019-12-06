@@ -4,14 +4,17 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --mode \"${NODE_ENV}\"",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^0.19.0",
     "core-js": "^3.3.2",
+    "element-ui": "^2.4.5",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.10",
+    "vue-google-oauth2": "^1.4.0",
     "vue-router": "^3.1.3",
     "vuex": "^3.0.1"
   },
@@ -27,6 +30,7 @@
     "babel-eslint": "^10.0.3",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "vue-cli-plugin-element": "^1.0.1",
     "vue-template-compiler": "^2.6.10"
   }
 }

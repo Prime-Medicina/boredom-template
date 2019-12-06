@@ -4,6 +4,9 @@ import './registerServiceWorker';
 import router from './router';
 import store from './store';
 
+import './plugins/g-auth';
+import './plugins/element';
+
 Vue.config.productionTip = false;
 
 new Vue({

@@ -1,0 +1,18 @@
+const { retrieveUser } = require('../user');
+
+module.exports = async ({ username }) => {
+  try {
+    const err = new Error('Unauthorized');
+    err.status = 401;
+
+    if (!username) throw err;
+
+    const user = await retrieveUser({ username });
+    if (user) return user;
+
+    throw err;
+  } catch (err) {
+    console.error('Error retrieving user:', err);
+    throw err;
+  }
+};

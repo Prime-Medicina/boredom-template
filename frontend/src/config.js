@@ -1,9 +1,11 @@
 const {
   NODE_ENV,
   VUE_APP_API_URL,
+  VUE_APP_GOOGLE_CLIENT_ID,
 } = process.env;
 
 export {
   NODE_ENV,
   VUE_APP_API_URL as API_URL,
+  VUE_APP_GOOGLE_CLIENT_ID as GOOGLE_CLIENT_ID,
 };

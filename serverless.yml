@@ -1,33 +1,47 @@
 service: juriscloud
-app: juriscloud
+#app: juriscloud
 org: rodrigogs
 
 plugins:
   - serverless-webpack
   - serverless-offline
   - serverless-finch
+  - serverless-pseudo-parameters
 
 custom:
   webpack:
-    webpackConfig: 'backend/webpack.config.js'
+    webpackConfig: 'webpack.config.js'
   client:
-    bucketName: 'juriscloud-webapp'
+    bucketName: '${self:service}-${self:provider.stage}-webapp'
     distributionFolder: 'frontend/dist'
+  usersTableName: '${self:service}-${self:provider.stage}-users'
 
 provider:
   name: aws
+  profile: rodrigogs
   runtime: nodejs12.x
-  stage: ${opt:stage, 'dev'}
+  stage: ${opt:stage, 'development'}
   region: sa-east-1
   versionFunctions: false
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - "logs:*"
-      Resource: "*"
-  profile: 'rodrigogs'
+        - 'logs:*'
+      Resource: '*'
+    - Effect: Allow
+      Action:
+        - 'dynamodb:*'
+      Resource:
+        Fn::GetAtt:
+          - UsersTable
+          - Arn
+  environment:
+    USERS_TABLE: ${self:custom.usersTableName}
 
 functions:
+  authorizer:
+    handler: backend/functions/authorizer/index.handler
+
   healthcheck:
     handler: backend/functions/api/healthcheck.handler
     events:
@@ -43,3 +57,51 @@ functions:
           method: get
           path: /fail/{status}/{message}
           cors: true
+          authorizer: authorizer
+
+  enquire:
+    handler: backend/functions/api/enquire.handler
+    events:
+      - http:
+          method: post
+          path: /enquire
+          cors: true
+          authorizer: authorizer
+
+resources:
+  Resources:
+    # This response is needed for custom authorizer failures cors support ¯\_(ツ)_/¯
+    GatewayResponse:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: EXPIRED_TOKEN
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        StatusCode: '401'
+    AuthFailureGatewayResponse:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: UNAUTHORIZED
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        StatusCode: '401'
+    # Dynamo Tables
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.usersTableName}
+        AttributeDefinitions:
+          - AttributeName: username
+            AttributeType: S
+        KeySchema:
+          - AttributeName: username
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 10
+          WriteCapacityUnits: 10
