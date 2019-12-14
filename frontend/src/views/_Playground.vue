@@ -1,34 +1,35 @@
-<template>
-  <div class="home">
-    {{ healthCheck }}
-    {{ fail }}
+<template lang="pug">
+  v-container#_playground(fluid)
+    v-row(align="center" justify="center")
+      | {{ healthCheck }}
+      | {{ fail }}
 
-    <el-row>
-      <el-button
-        type="primary"
-        icon="fas fa-edit"
-        @click="handleClickLogin"
-        :disabled="!isInit"
-      >get authCode</el-button>
-      <el-button
-        type="primary"
-        icon="fas fa-edit"
-        @click="handleClickSignIn"
-        v-if="!isSignIn"
-        :disabled="!isInit"
-      >sign in</el-button>
-      <el-button
-        type="primary"
-        icon="fas fa-edit"
-        @click="handleClickSignOut"
-        v-if="isSignIn"
-        :disabled="!isInit"
-      >sign out</el-button>
-      <i class="fas fa-edit"></i>
-      <p>isInit: {{isInit}}</p>
-      <p>isSignIn: {{isSignIn}}</p>
-    </el-row>
-  </div>
+      input(:value="authToken")
+
+      v-row
+        v-button(
+          type="primary"
+          icon="fas fa-edit"
+          @click="handleClickLogin"
+          :disabled="!isInit"
+        ) get authCode
+        v-button(
+          type="primary"
+          icon="fas fa-edit"
+          @click="handleClickSignIn"
+          v-if="!isSignIn"
+          :disabled="!isInit"
+        ) sign in
+        v-button(
+          type="primary"
+          icon="fas fa-edit"
+          @click="handleClickSignOut"
+          v-if="isSignIn"
+          :disabled="!isInit"
+        ) sign out
+        i.fas.fa-edit
+        p isInit: {{isInit}}
+        p isSignIn: {{isSignIn}}
 </template>
 
 <script>
@@ -43,6 +44,7 @@ export default {
       fail: null,
       isInit: false,
       isSignIn: false,
+      authToken: null,
     };
   },
 
@@ -85,6 +87,7 @@ export default {
           window.localStorage.authCode = this
             .$gAuth.GoogleAuth.currentUser.get().getAuthResponse().id_token;
           this.isSignIn = this.$gAuth.isAuthorized;
+          this.authToken = this.$gAuth.GoogleAuth.currentUser.get().getAuthResponse().id_token;
         })
         .catch((error) => {
           console.error(error);
