@@ -1,5 +1,5 @@
 service: juriscloud
-#app: juriscloud
+app: juriscloud
 org: rodrigogs
 
 plugins:
@@ -7,6 +7,9 @@ plugins:
   - serverless-offline
   - serverless-finch
   - serverless-pseudo-parameters
+
+package:
+  individually: true
 
 custom:
   webpack:

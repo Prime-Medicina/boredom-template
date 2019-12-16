@@ -3,7 +3,7 @@
     v-navigation-drawer(v-model="drawer" app clipped)
       v-list-item-group(v-model="currentRoute" dense)
 
-        v-list-item(@click="navigate('/')" value="home")
+        v-list-item(@click="navigate('/')" value="main")
           v-list-item-action
             v-icon mdi-view-dashboard
           v-list-item-content

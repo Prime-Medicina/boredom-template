@@ -9,10 +9,10 @@
     "build:frontend": "cd frontend && npm install && npm run build",
     "build:backend": "sls webpack --out backend/dist",
     "deploy": "cross-env-shell NODE_ENV=development \"npm run build:frontend && npm run deploy:development\"",
-    "deploy:frontend": "sls client deploy --no-confirm",
-    "deploy:backend": "sls deploy",
-    "deploy:development": "cross-env-shell NODE_ENV=development \"npm run deploy:backend -- -s development && npm run deploy:frontend -- -s development\"",
-    "deploy:production": "cross-env-shell NODE_ENV=production \"npm run deploy:backend -- -s production && npm run deploy:frontend -- -s production\""
+    "deploy:frontend": "sls client deploy -s ${NODE_ENV} --no-confirm",
+    "deploy:backend": "sls deploy -s ${NODE_ENV}",
+    "deploy:development": "cross-env-shell NODE_ENV=development \"npm run deploy:backend && npm run deploy:frontend\"",
+    "deploy:production": "cross-env-shell NODE_ENV=production \"npm run deploy:backend && npm run deploy:frontend\""
   },
   "dependencies": {
     "aws-sdk": "^2.580.0",
@@ -24,6 +24,7 @@
     "eslint": "^6.7.1",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
+    "serverless": "^1.59.3",
     "serverless-finch": "^2.4.3",
     "serverless-offline": "^5.12.0",
     "serverless-pseudo-parameters": "^2.5.0",
