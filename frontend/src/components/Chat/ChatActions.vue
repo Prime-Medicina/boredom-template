@@ -4,6 +4,7 @@
       v-text-field(
         placeholder="Message"
         v-model="message.text"
+        v-on:keyup.enter="send"
       )
       v-btn(@click="send" :disabled="!isValidMessage") Send
 </template>
@@ -22,7 +23,7 @@ export default {
   methods: {
     send() {
       this.$emit('send', this.message);
-      this.message = { from: 'me', text: '' };
+      this.message = { from: 'me', text: '', timestamp: Date.now() };
     },
   },
 

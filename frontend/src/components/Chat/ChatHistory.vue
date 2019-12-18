@@ -1,22 +1,13 @@
 <template lang="pug">
   v-card.chat-history
-    v-card-text
-      v-row(v-for="message in messages" :key="JSON.stringify(message)")
-        span(v-if="isMessageFromMe(message)")
-          v-chip.ma-2(color="blue")
-            v-avatar(left)
-              v-icon mdi-account-circle
-            strong {{ message.from }}:
-            | {{ message.text }}
-        span(v-else)
-          v-chip.ma-2(color="red")
-            strong {{ message.from }}:
-            | {{ message.text }}
-            v-avatar(right)
-              v-icon mdi-account-circle
+    v-card-text.history(ref="history")
+        v-row(v-for="(message, index) in messages" :key="index")
+          ChatMessage(:message="message" :ref="`message-${index}`")
 </template>
 
 <script>
+import ChatMessage from './ChatMessage/index.vue';
+
 export default {
   name: 'ChatHistory',
 
@@ -27,10 +18,50 @@ export default {
     },
   },
 
+  components: {
+    ChatMessage,
+  },
+
   methods: {
     isMessageFromMe(message) {
       return message.from === 'me';
     },
+
+    focusMessage(index) {
+      this.$nextTick(() => {
+        const messageElement = this.$refs[`message-${index}`];
+        if (messageElement) {
+          this.$refs.history.scrollTop = messageElement[0].$el.offsetTop;
+        } else {
+          setTimeout(() => this.focusMessage(index), 100);
+        }
+      });
+    },
+  },
+
+  watch: {
+    messages() {
+      this.focusMessage(this.messages.length - 1);
+    },
   },
 };
 </script>
+
+<style scoped>
+.history {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+@media screen and (max-width: 959px) {
+  .history {
+    height: calc(100vh - 346px);
+  }
+}
+
+@media screen and (min-width: 960px) {
+  .history {
+    height: calc(100vh - 354px);
+  }
+}
+</style>
