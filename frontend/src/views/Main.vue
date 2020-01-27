@@ -2,9 +2,7 @@
   v-container#main(fluid fill-height)
     v-row.fill-height
       v-col.fill-height
-        v-card.fill-height
-          v-card-text.fill-height
-            Chat
+        Chat
 </template>
 
 <script>

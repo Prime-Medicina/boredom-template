@@ -1,8 +1,7 @@
 <template lang="pug">
-  v-card.chat-history
-    v-card-text.history(ref="history")
-        v-row(v-for="(message, index) in messages" :key="index")
-          ChatMessage(:message="message" :ref="`message-${index}`")
+  .chat-history(ref="history")
+    v-row(v-for="(message, index) in messages" :key="index")
+      ChatMessage(:message="message" :ref="`message-${index}`")
 </template>
 
 <script>
@@ -48,19 +47,19 @@ export default {
 </script>
 
 <style scoped>
-.history {
+.chat-history {
   overflow-y: auto;
   overflow-x: hidden;
 }
 
 @media screen and (max-width: 959px) {
-  .history {
+  .chat-history {
     height: calc(100vh - 346px);
   }
 }
 
 @media screen and (min-width: 960px) {
-  .history {
+  .chat-history {
     height: calc(100vh - 354px);
   }
 }
