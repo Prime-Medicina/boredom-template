@@ -15,16 +15,16 @@
     "deploy:production": "cross-env-shell NODE_ENV=production \"npm run deploy:backend && npm run deploy:frontend\""
   },
   "dependencies": {
-    "aws-sdk": "^2.608.0",
+    "aws-sdk": "^2.611.0",
     "uuid": "^3.4.0",
     "juriscloud-core": "file:."
   },
   "devDependencies": {
-    "cross-env": "^6.0.3",
+    "cross-env": "^7.0.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.20.0",
-    "serverless": "^1.61.3",
+    "eslint-plugin-import": "^2.20.1",
+    "serverless": "^1.63.0",
     "serverless-finch": "^2.5.2",
     "serverless-offline": "^5.12.1",
     "serverless-pseudo-parameters": "^2.5.0",
