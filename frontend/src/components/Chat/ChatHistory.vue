@@ -1,7 +1,12 @@
 <template lang="pug">
   .chat-history(ref="history")
+
     v-row(v-for="(message, index) in messages" :key="index")
       ChatMessage(:message="message" :ref="`message-${index}`")
+
+    v-row(v-if="typing")
+      v-col(cols="9") ...
+
 </template>
 
 <script>
@@ -11,6 +16,11 @@ export default {
   name: 'ChatHistory',
 
   props: {
+    typing: {
+      type: Boolean,
+      default: false,
+    },
+
     messages: {
       type: Array,
       required: true,
@@ -36,11 +46,18 @@ export default {
         }
       });
     },
+
+    async startTyping(timeout) {
+      this.typing = true;
+      await new Promise((resolve) => setTimeout(resolve, timeout));
+      this.typing = false;
+    },
   },
 
   watch: {
     messages() {
-      this.focusMessage(this.messages.length - 1);
+      const lastMessageIndex = this.messages.length - 1;
+      this.focusMessage(lastMessageIndex);
     },
   },
 };

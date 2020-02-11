@@ -2,21 +2,25 @@
   v-card.fill-height.d-flex.flex-column(flat)
     v-card-text.fill-height.d-flex.flex-column
       ChatHistory.pa-2.ma-1.flex-grow-1(
+        ref="chatHistory"
         :messages="history"
       )
     v-card-actions.actions
       ChatActions(
-        v-if="actionType"
+        v-if="requirements"
         v-on:send="handleMessage"
-        :action-type="actionType"
-        :action-options="actionOptions"
+        :requirements="requirements"
       )
 </template>
 
 <script>
 import ChatActions from './ChatActions.vue';
 import ChatHistory from './ChatHistory.vue';
-import { TEXT } from '../../modules/enum/chatActionTypes';
+// import chatActionTypes from '../../modules/enum/chatActionTypes';
+import conversationCursors from '../../modules/enum/conversationCursors';
+import { enquire } from '../../modules/api';
+
+const randomIntFromInterval = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
 export default {
   name: 'Chat',
@@ -26,67 +30,43 @@ export default {
     ChatHistory,
   },
 
-  data: () => ({
-    messages: [],
-  }),
+  data() {
+    return {
+      messages: [],
+      requirements: null,
+      cursor: conversationCursors.initialize,
+    };
+  },
 
   created() {
     this.init();
   },
 
   methods: {
-    async init() {
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        const response = {
-          from: 'BOT',
-          text: 'Hello, I am a robot! What is your name?',
-          timestamp: Date.now(),
-          requirements: {
-            actionType: TEXT,
-            options: {
-              minLength: 8,
-              maxLength: 50,
-            },
-          },
-        }; // Future enquire call -> Start enquire process here
-
-        this.messages.push(response);
-      } catch (err) {
-        console.error(err);
-      }
+    init() {
+      this.handleMessage({ cursor: this.cursor, timestamp: Date.now(), from: 'me' }); // Initialize enquirer
     },
 
     async handleMessage(message) {
-      await (() => 'noop')(); // Future enquire call
-      this.messages.push(message);
-      await this.waitForResponse();
-    },
+      if (this.cursor !== conversationCursors.initialize) {
+        this.messages.push(message);
+      }
 
-    async waitForResponse() {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      this.messages.push({ from: 'bot', text: `LMFAO-${Date.now()}`, timestamp: Date.now() });
+      const { cursor, answers, requirements } = await enquire({ message, cursor: this.cursor });
+
+      for (const answer of answers) {
+        await this.$refs.chatHistory.startTyping(randomIntFromInterval(250, 550));
+        this.messages.push({ ...answer, timestamp: Date.now() });
+      }
+
+      this.cursor = cursor;
+      this.requirements = requirements;
     },
   },
 
   computed: {
     history() {
       return [...this.messages].sort((a, b) => a.timestamp - b.timestamp);
-    },
-
-    lastBotMessage() {
-      return this.messages.reduce((result, current) => {
-        if (current.from !== 'BOT') return result;
-        return current;
-      }, { requirements: {} });
-    },
-
-    actionType() {
-      return this.lastBotMessage.requirements.actionType;
-    },
-
-    actionOptions() {
-      return this.lastBotMessage.requirements.actionOptions;
     },
   },
 };

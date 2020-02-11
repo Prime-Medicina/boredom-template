@@ -1,11 +1,12 @@
 <template lang="pug">
   v-row.chat-message
 
-    v-col(v-if="isMyMessage" cols="9")
+    v-col(v-if="isMessageFromMe" cols="9")
       Left(:message="message")
 
     v-spacer
-    v-col.d-flex.justify-end(v-if="!isMyMessage" cols="9")
+
+    v-col.d-flex.justify-end(v-if="!isMessageFromMe" cols="9")
       Right(:message="message")
 </template>
 
@@ -29,7 +30,7 @@ export default {
   },
 
   computed: {
-    isMyMessage() {
+    isMessageFromMe() {
       return this.message.from === 'me';
     },
   },

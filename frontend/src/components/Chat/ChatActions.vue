@@ -1,25 +1,25 @@
 <template lang="pug">
-  v-text-field(
-    v-if="actionType === chatActionTypes.TEXT"
-    placeholder="Message"
-    append-outer-icon="mdi-send"
-    v-model="message.text"
-    v-on:keyup.enter="send"
-    @click:append-outer="send"
-  )
+  form.chat-actions
+
+    v-text-field(
+      v-if="requirements.type === 'text'"
+      placeholder="Message"
+      append-outer-icon="mdi-send"
+      v-model="message.text"
+      v-on:keyup.enter="send"
+      @click:append-outer="send"
+    )
+
 </template>
 
 <script>
-import chatActionTypes from '../../modules/enum/chatActionTypes';
-
 export default {
   name: 'ChatActions',
 
   props: {
-    actionType: {
-      type: String,
+    requirements: {
+      type: Object,
       required: true,
-      enum: [...chatActionTypes.asArray],
     },
   },
 
@@ -33,17 +33,13 @@ export default {
   methods: {
     send() {
       this.$emit('send', { ...this.message, timestamp: Date.now() });
-      this.message = { from: 'me', text: '' };
+      this.message = { from: 'me', content: '' };
     },
   },
 
   computed: {
-    isValidMessage() {
+    isValidMessage() { // TODO requirements should be considered here
       return (this.message.text || '').length > 0;
-    },
-
-    chatActionTypes() {
-      return chatActionTypes;
     },
   },
 };

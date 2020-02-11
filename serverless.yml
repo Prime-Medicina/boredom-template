@@ -18,6 +18,7 @@ custom:
     bucketName: '${self:service}-${self:provider.stage}-webapp'
     distributionFolder: 'frontend/dist'
   usersTableName: '${self:service}-${self:provider.stage}-users'
+  sessionTableName: '${self:service}-${self:provider.stage}-session'
 
 provider:
   name: aws
@@ -40,6 +41,7 @@ provider:
           - Arn
   environment:
     USERS_TABLE: ${self:custom.usersTableName}
+    SESSION_TABLE: ${self:custom.sessionTableName}
 
 functions:
   authorizer:
@@ -104,6 +106,19 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: username
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 10
+          WriteCapacityUnits: 10
+    SessionTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.sessionTableName}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 10

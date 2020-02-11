@@ -1,9 +1,10 @@
 <template lang="pug">
-  v-chip.ma-2.elevation-3(color="blue")
-    v-avatar(left)
-      v-icon mdi-account-circle
-    strong {{ message.from }}:
-    | {{ message.text }}
+  v-scale-transition
+    v-chip.ma-2.elevation-3(color="blue" v-show="show")
+      v-avatar(left)
+        v-icon mdi-account-circle
+      strong {{ message.from }}:
+      | {{ message.text }}
 </template>
 
 <script>
@@ -15,6 +16,16 @@ export default {
       type: Object,
       required: true,
     },
+  },
+
+  data: () => ({
+    show: false,
+  }),
+
+  created() {
+    setTimeout(() => {
+      this.show = true;
+    }, 100);
   },
 };
 </script>

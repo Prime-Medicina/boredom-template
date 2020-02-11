@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "sls offline & (cd frontend && npm run serve)",
+    "start:frontend": "(cd frontend && npm run serve)",
+    "start:backend": "sls offline",
     "preinstall": "npx submodules-install",
     "build": "npm install && npm run build:backend && npm run build:frontend",
     "build:frontend": "cd frontend && npm install && npm run build",
@@ -15,7 +18,7 @@
     "deploy:production": "cross-env-shell NODE_ENV=production \"npm run deploy:backend && npm run deploy:frontend\""
   },
   "dependencies": {
-    "aws-sdk": "^2.611.0",
+    "aws-sdk": "^2.614.0",
     "uuid": "^3.4.0",
     "juriscloud-core": "file:."
   },

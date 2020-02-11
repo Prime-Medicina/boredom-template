@@ -5,7 +5,7 @@ const getGoogleAuthCredentials = async (token) => {
   let credentials = {};
 
   try {
-    (credentials = await getGoogleTokenInfo(token));
+    credentials = await getGoogleTokenInfo(token);
   } catch (err) {
     console.error('Error retrieving Google token info', err);
   }
@@ -30,6 +30,7 @@ const getGoogleAuthCredentials = async (token) => {
   try {
     user = await authenticate(userInfo);
   } catch (err) {
+    if (err.status !== 401) throw err;
     user = await register(userInfo);
   }
 
