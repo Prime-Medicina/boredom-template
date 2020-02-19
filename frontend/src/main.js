@@ -1,11 +1,10 @@
 import Vue from 'vue';
+import vuetify from '@/plugins/vuetify';
+import './plugins/noty';
+import '@/registerServiceWorker';
+import store from '@/store';
+import router from '@/router';
 import App from './App.vue';
-import './registerServiceWorker';
-import store from './store';
-import router from './router';
-
-import './plugins/g-auth';
-import vuetify from './plugins/vuetify';
 
 Vue.config.productionTip = false;
 

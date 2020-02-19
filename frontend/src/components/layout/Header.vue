@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { NODE_ENV } from '../../config';
+import { NODE_ENV } from '@/config';
 
 export default {
   name: 'AppHeader',

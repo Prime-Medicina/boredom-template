@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Chat from '../components/Chat/index.vue';
+import Chat from '@/components/Chat/index.vue';
 
 export default {
   name: 'Main',

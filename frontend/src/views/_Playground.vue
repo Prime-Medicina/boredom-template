@@ -68,8 +68,8 @@
 
 <script>
 import axios from 'axios';
-import { API_URL } from '../config';
-import Chat from '../components/Chat/index.vue';
+import { API_URL } from '@/config';
+import Chat from '@/components/Chat/index.vue';
 
 export default {
   name: 'Home',

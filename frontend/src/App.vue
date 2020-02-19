@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { Header, Content, Footer } from './components/layout';
+import { Header, Content, Footer } from '@/components/layout';
 
 export default {
   name: 'App',

@@ -4,38 +4,23 @@
     v-row(v-for="(message, index) in messages" :key="index")
       ChatMessage(:message="message" :ref="`message-${index}`")
 
-    v-row(v-if="typing")
+    v-row(v-if="isTyping")
       v-col(cols="9") ...
 
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import ChatMessage from './ChatMessage/index.vue';
 
 export default {
   name: 'ChatHistory',
-
-  props: {
-    typing: {
-      type: Boolean,
-      default: false,
-    },
-
-    messages: {
-      type: Array,
-      required: true,
-    },
-  },
 
   components: {
     ChatMessage,
   },
 
   methods: {
-    isMessageFromMe(message) {
-      return message.from === 'me';
-    },
-
     focusMessage(index) {
       this.$nextTick(() => {
         const messageElement = this.$refs[`message-${index}`];
@@ -46,12 +31,13 @@ export default {
         }
       });
     },
+  },
 
-    async startTyping(timeout) {
-      this.typing = true;
-      await new Promise((resolve) => setTimeout(resolve, timeout));
-      this.typing = false;
-    },
+  computed: {
+    ...mapGetters('chat', {
+      messages: 'sortedMessages',
+      isTyping: 'isTyping',
+    }),
   },
 
   watch: {
