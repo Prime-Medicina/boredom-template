@@ -2,7 +2,7 @@ const { join } = require('path');
 const slsw = require('serverless-webpack');
 
 const context = __dirname;
-const output = join(__dirname, 'backend', 'dist');
+const output = join(__dirname, 'dist');
 
 module.exports = {
   context,

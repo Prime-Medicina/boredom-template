@@ -7,7 +7,7 @@
     "start": "sls offline & (cd frontend && npm run serve)",
     "start:frontend": "(cd frontend && npm run serve)",
     "start:backend": "sls offline",
-    "preinstall": "npx submodules-install",
+    "postinstall": "npx submodules-install",
     "build": "npm install && npm run build:backend && npm run build:frontend",
     "build:frontend": "cd frontend && npm install && npm run build",
     "build:backend": "sls webpack --out backend/dist",
@@ -18,9 +18,9 @@
     "deploy:production": "cross-env-shell NODE_ENV=production \"npm run deploy:backend && npm run deploy:frontend\""
   },
   "dependencies": {
-    "aws-sdk": "^2.614.0",
+    "aws-sdk": "^2.619.0",
     "uuid": "^3.4.0",
-    "juriscloud-core": "file:."
+    "juriscloud": "file:./lib"
   },
   "devDependencies": {
     "cross-env": "^7.0.0",
@@ -32,9 +32,10 @@
     "serverless-offline": "^5.12.1",
     "serverless-pseudo-parameters": "^2.5.0",
     "serverless-webpack": "^5.3.1",
-    "webpack": "^4.41.5"
+    "webpack": "^4.41.6"
   },
   "submodules": [
+    "lib",
     "frontend"
   ]
 }

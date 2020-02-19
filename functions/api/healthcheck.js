@@ -1,7 +1,7 @@
 const responseBuilder = require('../helpers/response-builder');
 const responseError = require('../helpers/response-error');
 
-const pkg = require('../../../package.json');
+const pkg = require('../../package.json');
 
 /**
  * @api {get} / Health check

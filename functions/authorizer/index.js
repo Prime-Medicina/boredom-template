@@ -1,4 +1,4 @@
-const { auth: { authenticate, register } } = require('juriscloud-core');
+const { core: { auth: { authenticate, register } } } = require('juriscloud');
 const { getGoogleTokenInfo, createAccessPolicy } = require('./lib');
 
 const getGoogleAuthCredentials = async (token) => {

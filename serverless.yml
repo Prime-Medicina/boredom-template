@@ -36,8 +36,11 @@ provider:
       Action:
         - 'dynamodb:*'
       Resource:
-        Fn::GetAtt:
+        - Fn::GetAtt:
           - UsersTable
+          - Arn
+        - Fn::GetAtt:
+          - SessionTable
           - Arn
   environment:
     USERS_TABLE: ${self:custom.usersTableName}
@@ -45,10 +48,10 @@ provider:
 
 functions:
   authorizer:
-    handler: backend/functions/authorizer/index.handler
+    handler: functions/authorizer/index.handler
 
   healthcheck:
-    handler: backend/functions/api/healthcheck.handler
+    handler: functions/api/healthcheck.handler
     events:
       - http:
           method: get
@@ -56,7 +59,7 @@ functions:
           cors: true
 
   fail:
-    handler: backend/functions/api/fail.handler
+    handler: functions/api/fail.handler
     events:
       - http:
           method: get
@@ -65,7 +68,7 @@ functions:
           authorizer: authorizer
 
   enquire:
-    handler: backend/functions/api/enquire.handler
+    handler: functions/api/enquire.handler
     events:
       - http:
           method: post
