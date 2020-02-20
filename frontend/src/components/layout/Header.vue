@@ -3,11 +3,11 @@
     v-navigation-drawer(v-model="drawer" app clipped v-if="isDev")
       v-list-item-group(v-model="currentRoute" dense)
 
-        v-list-item(@click="navigate('/')" value="main")
+        v-list-item(@click="navigate('/chat')" value="chat")
           v-list-item-action
-            v-icon mdi-view-dashboard
+            v-icon mdi-chat
           v-list-item-content
-            v-list-item-title Dashboard
+            v-list-item-title Chat
 
         v-list-item(@click="navigate('/color-palette')" value="color-palette")
           v-list-item-action

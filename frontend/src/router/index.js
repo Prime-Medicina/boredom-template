@@ -6,9 +6,9 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'main',
-    component: () => import(/* webpackChunkName: "[request]" */ '../views/Main.vue'),
+    path: '/chat',
+    name: 'chat',
+    component: () => import(/* webpackChunkName: "[request]" */ '../views/Chat.vue'),
     meta: {
       title: 'Juriscloud',
       requiresAuth: true,
@@ -52,7 +52,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  window.currentPageTitle = to.meta.title ? to.meta.title : 'Untitled page';
+  document.title = to.meta.title ? to.meta.title : 'Untitled page';
 
   if (to.meta.requiresAuth && !store.getters['auth/isLoggedIn']) {
     next({ name: 'login' });

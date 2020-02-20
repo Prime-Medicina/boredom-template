@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-container#main(fluid fill-height)
+  v-container#chat(fluid fill-height)
     v-row.fill-height
       v-col.fill-height
         Chat
@@ -9,7 +9,7 @@
 import Chat from '@/components/Chat/index.vue';
 
 export default {
-  name: 'Main',
+  name: 'ChatView',
 
   components: {
     Chat,

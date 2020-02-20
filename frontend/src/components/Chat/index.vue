@@ -1,8 +1,8 @@
 <template lang="pug">
   v-card.fill-height.d-flex.flex-column(flat)
-    v-card-text.fill-height.d-flex.flex-column
+    v-card-text.history.fill-height.d-flex.flex-column.grey.lighten-5
       ChatHistory.pa-2.ma-1.flex-grow-1
-    v-card-actions.actions
+    v-card-actions.actions.blue-grey.lighten-5
       ChatActions
 </template>
 
@@ -27,5 +27,8 @@ export default {
 <style scoped>
 .actions {
   padding: 0 5vh 1vh 5vh;
+}
+
+.history {
 }
 </style>

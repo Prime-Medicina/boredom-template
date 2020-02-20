@@ -1,18 +1,15 @@
 <template lang="pug">
-  v-text-field.action-cep(
-    type="text"
-    placeholder="Message"
-    append-outer-icon="mdi-send"
+  v-radio-group.action-civil-status(
     v-model="model"
-    v-mask="mask"
-    v-on:keyup.enter="send"
-    @click:append-outer="send"
+    row
   )
+    v-radio(label="Solteiro" value="single")
+    v-radio(label="Casado" value="maried")
 </template>
 
 <script>
 export default {
-  name: 'ActionCep',
+  name: 'ActionCivilStatus',
 
   props: {
     value: {
@@ -28,10 +25,6 @@ export default {
       required: true,
     },
   },
-
-  data: () => ({
-    mask: '99999-999',
-  }),
 
   methods: {
     send() {

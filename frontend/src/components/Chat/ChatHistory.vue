@@ -2,6 +2,7 @@
   .chat-history(ref="history")
 
     v-row(v-for="(message, index) in messages" :key="index")
+      v-spacer(v-if="message.from === 'me'")
       ChatMessage(:message="message" :ref="`message-${index}`")
 
     v-row(v-if="isTyping")

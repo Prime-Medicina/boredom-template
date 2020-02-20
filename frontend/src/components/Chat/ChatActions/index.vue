@@ -28,6 +28,13 @@
       :hint="requirements.hint"
       :onSend="send"
     )
+
+    ActionCivilStatus(
+      v-if="requirements.type === 'civil_status'"
+      v-model="message.content"
+      :hint="requirements.hint"
+      :onSend="send"
+    )
 </template>
 
 <script>
@@ -36,6 +43,7 @@ import ActionText from './ActionText.vue';
 import ActionNumber from './ActionNumber.vue';
 import ActionCep from './ActionCep.vue';
 import ActionNationality from './ActionNationality.vue';
+import ActionCivilStatus from './ActionCivilStatus.vue';
 
 export default {
   name: 'ChatActions',
@@ -45,6 +53,7 @@ export default {
     ActionNumber,
     ActionCep,
     ActionNationality,
+    ActionCivilStatus,
   },
 
   data: () => ({

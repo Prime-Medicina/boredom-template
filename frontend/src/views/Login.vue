@@ -64,7 +64,7 @@ export default {
         response,
       };
       this.$store.dispatch('auth/login', user);
-      this.$router.push({ name: 'main' });
+      this.$router.push({ name: 'chat' });
     },
 
     onGoogleLoginFailure(error) {

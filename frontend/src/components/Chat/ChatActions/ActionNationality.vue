@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-autocomplete(
+  v-autocomplete.action-nationality(
     v-model="model"
     :items="nations"
     item-text="name"

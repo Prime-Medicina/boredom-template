@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-text-field.answer-text(
+  v-text-field.action-text(
     type="text"
     :placeholder="hint"
     append-outer-icon="mdi-send"
