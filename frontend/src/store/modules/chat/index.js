@@ -3,6 +3,7 @@ import * as getters from './getters';
 import * as mutations from './mutations';
 
 const state = {
+  isInitialized: false,
   cursor: '',
   /*
    TODO

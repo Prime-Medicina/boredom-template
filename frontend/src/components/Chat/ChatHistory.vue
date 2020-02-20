@@ -20,30 +20,28 @@ export default {
     ChatMessage,
   },
 
+  created() {
+    if (this.messages.length) this.scrollDown();
+  },
+
   methods: {
-    focusMessage(index) {
-      this.$nextTick(() => {
-        const messageElement = this.$refs[`message-${index}`];
-        if (messageElement) {
-          this.$refs.history.scrollTop = messageElement[0].$el.offsetTop;
-        } else {
-          setTimeout(() => this.focusMessage(index), 100);
-        }
-      });
+    scrollDown() {
+      setTimeout(() => {
+        this.$refs.history.scrollTop = this.$refs.history.scrollHeight;
+      }, 500);
     },
   },
 
   computed: {
     ...mapGetters('chat', {
-      messages: 'sortedMessages',
       isTyping: 'isTyping',
+      messages: 'sortedMessages',
     }),
   },
 
   watch: {
     messages() {
-      const lastMessageIndex = this.messages.length - 1;
-      this.focusMessage(lastMessageIndex);
+      this.scrollDown();
     },
   },
 };

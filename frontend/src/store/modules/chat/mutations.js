@@ -1,5 +1,9 @@
 import Vue from 'vue';
 
+export const initialized = (state) => {
+  Vue.set(state, 'isInitialized', true);
+};
+
 export const startedTyping = (state) => {
   Vue.set(state, 'isTyping', true);
 };
@@ -24,4 +28,11 @@ export const messageSent = (state, message) => {
 export const messageDelivered = (state, messageId) => {
   const message = state.messages.find((msg) => msg.id === messageId);
   message.delivered = true;
+};
+
+export const fillMessageHistory = (state, messages) => {
+  Object.keys(messages).forEach((cursor) => {
+    const cursorMessages = messages[cursor];
+    state.messages.push(...cursorMessages);
+  });
 };

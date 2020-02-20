@@ -10,7 +10,7 @@
     "postinstall": "npx submodules-install",
     "build": "npm install && npm run build:backend && npm run build:frontend",
     "build:frontend": "cd frontend && npm install && npm run build",
-    "build:backend": "sls webpack --out backend/dist",
+    "build:backend": "sls webpack --out dist",
     "deploy": "cross-env-shell NODE_ENV=development \"npm run build:frontend && npm run deploy:development\"",
     "deploy:frontend": "sls client deploy -s ${NODE_ENV} --no-confirm",
     "deploy:backend": "sls deploy -s ${NODE_ENV}",
@@ -18,7 +18,7 @@
     "deploy:production": "cross-env-shell NODE_ENV=production \"npm run deploy:backend && npm run deploy:frontend\""
   },
   "dependencies": {
-    "aws-sdk": "^2.619.0",
+    "aws-sdk": "^2.622.0",
     "uuid": "^3.4.0",
     "juriscloud": "file:./lib"
   },
@@ -27,7 +27,7 @@
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.1",
-    "serverless": "^1.63.0",
+    "serverless": "^1.64.0",
     "serverless-finch": "^2.5.2",
     "serverless-offline": "^5.12.1",
     "serverless-pseudo-parameters": "^2.5.0",

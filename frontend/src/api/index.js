@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { API_URL } from '@/config';
 import authAdapter from './auth';
-import enquirerAdapter from './enquirer';
+import chatAdapter from './chat';
 
 const request = axios.create({
   baseURL: API_URL,
@@ -17,14 +17,15 @@ const retrieveAuthToken = () => import('@/store')
 // Intercept requests and update auth token
 request.interceptors.request.use(async (config) => {
   const idToken = await retrieveAuthToken();
-  return {
-    ...config,
-    headers: { ...config.headers, Authorization: idToken },
-  };
+  const newConfig = { ...config };
+
+  newConfig.headers.Authorization = idToken;
+
+  return newConfig;
 }, Promise.reject);
 
 const healthCheckAdapter = async (shadowRequest) => (await shadowRequest.get('/')).data;
 
 export const healthCheck = healthCheckAdapter(request);
 export const auth = authAdapter(request);
-export const enquirer = enquirerAdapter(request);
+export const chat = chatAdapter(request);

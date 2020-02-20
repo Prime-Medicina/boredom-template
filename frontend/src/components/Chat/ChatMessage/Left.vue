@@ -4,7 +4,7 @@
       v-avatar(left)
         v-icon mdi-account-circle
       strong {{ message.from }}:
-      | {{ message.text }}
+      | {{ message.content }}
 </template>
 
 <script>

@@ -1,6 +1,8 @@
-export const isTyping = (state) => state.isTyping;
+export const isInitialized = (state) => !!state.isInitialized;
 
-export const requirements = (state) => state.requirements;
+export const isTyping = (state) => !!state.isTyping;
+
+export const requirements = (state) => state.requirements || {};
 
 export const cursor = (state) => state.cursor;
 

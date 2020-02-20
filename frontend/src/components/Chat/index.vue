@@ -7,8 +7,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import ChatActions from './ChatActions.vue';
+import ChatActions from './ChatActions/index.vue';
 import ChatHistory from './ChatHistory.vue';
 
 export default {
@@ -21,12 +20,6 @@ export default {
 
   created() {
     this.$store.dispatch('chat/initialize');
-  },
-
-  computed: {
-    ...mapGetters({
-      messages: 'sortedMessages',
-    }),
   },
 };
 </script>

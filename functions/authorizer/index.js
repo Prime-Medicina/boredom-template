@@ -44,9 +44,11 @@ const authorizer = async ({ type, authorizationToken, methodArn }) => {
   return createAccessPolicy(user, key, methodArn);
 };
 
-module.exports.handler = (event, context, callback) => authorizer(event)
-  .then((accessPolicy) => callback(null, accessPolicy))
-  .catch((err) => {
+module.exports.handler = async (event) => {
+  try {
+    return await authorizer(event);
+  } catch (err) {
     console.error('Authorization error:', err);
-    return callback('Unauthorized');
-  });
+    throw new Error('Unauthorized');
+  }
+};

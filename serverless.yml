@@ -35,13 +35,7 @@ provider:
     - Effect: Allow
       Action:
         - 'dynamodb:*'
-      Resource:
-        - Fn::GetAtt:
-          - UsersTable
-          - Arn
-        - Fn::GetAtt:
-          - SessionTable
-          - Arn
+      Resource: '*'
   environment:
     USERS_TABLE: ${self:custom.usersTableName}
     SESSION_TABLE: ${self:custom.sessionTableName}
@@ -67,18 +61,36 @@ functions:
           cors: true
           authorizer: authorizer
 
-  enquire:
-    handler: functions/api/enquire.handler
+  chat:
+    handler: functions/api/chat.handler
     events:
       - http:
           method: post
-          path: /enquire
+          path: /chat
+          cors: true
+          authorizer: authorizer
+
+  session:
+    handler: functions/api/session.handler
+    events:
+      - http:
+          method: get
+          path: /session
           cors: true
           authorizer: authorizer
 
 resources:
   Resources:
     # This response is needed for custom authorizer failures cors support ¯\_(ツ)_/¯
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
     GatewayResponse:
       Type: 'AWS::ApiGateway::GatewayResponse'
       Properties:
@@ -105,14 +117,26 @@ resources:
       Properties:
         TableName: ${self:custom.usersTableName}
         AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
           - AttributeName: username
             AttributeType: S
         KeySchema:
-          - AttributeName: username
+          - AttributeName: id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 10
           WriteCapacityUnits: 10
+        GlobalSecondaryIndexes:
+          - IndexName: username
+            KeySchema:
+              - AttributeName: username
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 10
+              WriteCapacityUnits: 10
     SessionTable:
       Type: AWS::DynamoDB::Table
       Properties:

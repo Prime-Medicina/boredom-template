@@ -1,6 +1,6 @@
 <template lang="pug">
   #app-header
-    v-navigation-drawer(v-model="drawer" app clipped)
+    v-navigation-drawer(v-model="drawer" app clipped v-if="isDev")
       v-list-item-group(v-model="currentRoute" dense)
 
         v-list-item(@click="navigate('/')" value="main")
@@ -9,12 +9,11 @@
           v-list-item-content
             v-list-item-title Dashboard
 
-        v-list-item(v-if="isDev" @click="navigate('/color-palette')" value="color-palette")
+        v-list-item(@click="navigate('/color-palette')" value="color-palette")
           v-list-item-action
             v-icon mdi-palette
           v-list-item-content
             v-list-item-title Color Palette
-              span.red--text(style="font-size: smaller;") &nbsp;Dev Only
 
     v-app-bar(app clipped-left)
       v-app-bar-nav-icon(@click.stop="drawer = !drawer")
