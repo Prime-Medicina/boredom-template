@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-card.fill-height.d-flex.flex-column(flat)
+  v-card.fill-height.d-flex.flex-column.elevation-4(flat)
     v-card-text.history.fill-height.d-flex.flex-column.grey.lighten-5
       ChatHistory.pa-2.ma-1.flex-grow-1
     v-card-actions.actions.blue-grey.lighten-5

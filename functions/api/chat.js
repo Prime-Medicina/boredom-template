@@ -4,17 +4,16 @@ const responseBuilder = require('../helpers/response-builder');
 const responseError = require('../helpers/response-error');
 
 module.exports.handler = async (event) => {
-  console.log('bla');
   try {
     const { consumer, body: { cursor, message } } = await getRequestContext(event);
-    const { cursor: nextCursor, answers, requirements } = await answer({
+    const { cursor: nextCursor, answers, config } = await answer({
       user: consumer, cursor, message,
     });
     return responseBuilder({
       body: {
         cursor: nextCursor,
         answers,
-        requirements,
+        config,
       },
     });
   } catch (err) {

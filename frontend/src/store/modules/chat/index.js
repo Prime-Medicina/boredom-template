@@ -8,7 +8,7 @@ const state = {
   /*
    TODO
    */
-  requirements: null,
+  config: null,
   /*
     [{
       from,

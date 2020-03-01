@@ -1,31 +1,33 @@
 <template lang="pug">
-  v-form(ref="form" lazy-validation).action-text
-    v-text-field(
-      type="text"
-      :placeholder="config.hint"
-      :minlength="config.minLength"
-      :maxlength="config.maxLength"
-      :rules="rules"
-      counter
-      autofocus
-      clearable
-      ref="input"
-      :append-outer-icon="outerIcon"
-      v-model="message"
-      v-on:keyup.enter="send"
-      @click:append-outer="send"
-      :loading="loading"
-    )
+  v-form(ref="form").action-choice
+    v-row
+      v-flex.d-flex.flex-column.flex-shrink-0.flex-grow-1
+        v-radio-group(
+          v-model="message"
+          row
+          :loading="loading"
+          :rules="rules"
+          v-on:keyup.enter="send"
+        )
+          v-radio(
+            v-for="(choice, index) in config.choices"
+            :key="index"
+            :label="choice.label"
+            :value="choice.value"
+          )
+      v-flex.d-flex.flex-column.flex-shrink-1.flex-grow-0(align-self-center)
+        v-btn(icon v-on:click="send" v-if="outerIcon")
+          v-icon(left) {{ outerIcon }}
 </template>
 
 <script>
 export default {
-  name: 'ActionText',
+  name: 'ActionChoice',
 
   props: {
     value: {
       type: Object,
-      required: true,
+      required: false,
     },
     config: {
       type: Object,
@@ -45,16 +47,15 @@ export default {
     },
   },
 
-  data: () => ({
-    valid: false,
-  }),
-
   created() {
     this.$nextTick(() => {
-      this.$refs.input.focus();
       if (this.hasContent) this.validate();
     });
   },
+
+  data: () => ({
+    valid: false,
+  }),
 
   methods: {
     send() {
@@ -81,9 +82,11 @@ export default {
         return this.value.content;
       },
       set(value) {
+        const choice = this.config.choices.find((c) => c.value === value);
         this.$emit('input', {
           ...this.value,
-          content: value,
+          content: choice.value,
+          mask: choice.label,
         });
       },
     },

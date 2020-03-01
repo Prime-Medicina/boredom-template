@@ -1,31 +1,40 @@
 <template lang="pug">
-  v-form(ref="form" lazy-validation).action-text
+  v-form(ref="form").action-phone
     v-text-field(
       type="text"
-      :placeholder="config.hint"
-      :minlength="config.minLength"
-      :maxlength="config.maxLength"
-      :rules="rules"
-      counter
-      autofocus
-      clearable
-      ref="input"
+      placeholder="CPF"
       :append-outer-icon="outerIcon"
+      minlength="14"
+      maxlength="14"
       v-model="message"
+      v-mask="mask"
       v-on:keyup.enter="send"
       @click:append-outer="send"
+      ref="input"
+      autofocus
+      clearable
+      counter
       :loading="loading"
+      :rules="computedRules"
     )
 </template>
 
 <script>
+import { mask } from 'vue-the-mask';
+import { cpf as validateCpf } from 'juriscloud/common/validations';
+import { getNumbers } from 'juriscloud/common/helpers/string';
+
 export default {
-  name: 'ActionText',
+  name: 'ActionPhone',
+
+  directives: {
+    mask,
+  },
 
   props: {
     value: {
       type: Object,
-      required: true,
+      required: false,
     },
     config: {
       type: Object,
@@ -45,16 +54,17 @@ export default {
     },
   },
 
-  data: () => ({
-    valid: false,
-  }),
-
   created() {
     this.$nextTick(() => {
       this.$refs.input.focus();
       if (this.hasContent) this.validate();
     });
   },
+
+  data: () => ({
+    valid: false,
+    mask: ['(##) ####-####', '(##) #####-####'],
+  }),
 
   methods: {
     send() {
@@ -74,6 +84,13 @@ export default {
         return 'mdi-send';
       }
       return undefined;
+    },
+
+    computedRules() {
+      return [
+        ...this.rules,
+        (value) => (!!value && validateCpf(getNumbers(value))) || 'CPF inválido',
+      ];
     },
 
     message: {

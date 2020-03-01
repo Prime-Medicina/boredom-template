@@ -10,7 +10,7 @@ const routes = [
     name: 'chat',
     component: () => import(/* webpackChunkName: "[request]" */ '../views/Chat.vue'),
     meta: {
-      title: 'Juriscloud',
+      title: 'JurisCloud',
       requiresAuth: true,
     },
   },
@@ -44,8 +44,21 @@ const routes = [
       requiresAuth: false,
     },
   },
+  // Redirects
+  {
+    path: '/',
+    redirect: 'chat',
+  },
+  // Errors
+  {
+    path: '*',
+    component: () => import(/* webpackChunkName: "[request]" */ '../views/PageNotFound.vue'),
+    meta: {
+      title: '404',
+      requiresAuth: false,
+    },
+  },
 ];
-
 
 const router = new VueRouter({
   routes,

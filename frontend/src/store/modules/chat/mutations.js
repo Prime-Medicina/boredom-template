@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import wrapAnswer from 'juriscloud/common/models/chat-message';
 
 export const initialized = (state) => {
   Vue.set(state, 'isInitialized', true);
@@ -17,17 +18,28 @@ export const cursorUpdated = (state, cursor) => {
   Vue.set(state, 'cursor', cursor);
 };
 
-export const requirementsUpdated = (state, requirements) => {
-  Vue.set(state, 'requirements', requirements);
+export const configUpdated = (state, config) => {
+  Vue.set(state, 'config', config);
 };
 
 export const messageSent = (state, message) => {
-  state.messages.push({ delivered: false, ...message });
+  state.messages.push({ delivered: false, failed: false, ...message });
 };
 
 export const messageDelivered = (state, messageId) => {
   const message = state.messages.find((msg) => msg.id === messageId);
   message.delivered = true;
+};
+
+export const messageFailed = (state, { messageId, error }) => {
+  const message = state.messages.find((msg) => msg.id === messageId);
+  message.failed = true;
+  state.messages.push(wrapAnswer({
+    type: 'error',
+    content: 'Ocorreu um erro no servidor, tente novamente',
+    from: 'bot',
+  }));
+  console.error('Server error', error.message);
 };
 
 export const fillMessageHistory = (state, messages) => {

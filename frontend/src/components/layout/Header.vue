@@ -1,6 +1,6 @@
 <template lang="pug">
   #app-header
-    v-navigation-drawer(v-model="drawer" app clipped v-if="isDev")
+    v-navigation-drawer(v-model="drawer" app clipped v-if="false")
       v-list-item-group(v-model="currentRoute" dense)
 
         v-list-item(@click="navigate('/chat')" value="chat")
@@ -16,8 +16,8 @@
             v-list-item-title Color Palette
 
     v-app-bar(app clipped-left)
-      v-app-bar-nav-icon(@click.stop="drawer = !drawer")
-      v-toolbar-title Juriscloud
+      v-app-bar-nav-icon(@click.stop="drawer = !drawer" v-if="false")
+      v-toolbar-title JurisCloud
 </template>
 
 <script>

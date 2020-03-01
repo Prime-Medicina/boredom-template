@@ -1,31 +1,47 @@
 <template lang="pug">
-  v-form(ref="form" lazy-validation).action-text
-    v-text-field(
-      type="text"
-      :placeholder="config.hint"
-      :minlength="config.minLength"
-      :maxlength="config.maxLength"
-      :rules="rules"
-      counter
-      autofocus
-      clearable
-      ref="input"
-      :append-outer-icon="outerIcon"
+  v-form(ref="form").action-state
+    v-autocomplete(
       v-model="message"
+      :items="states"
+      item-text="name"
+      item-value="fu"
+      :hint="config.hint"
+      persistent-hint
+      :append-outer-icon="outerIcon"
       v-on:keyup.enter="send"
       @click:append-outer="send"
-      :loading="loading"
+      ref="input"
+      autofocus
+      clearable
+      :loading="loading",
+      :rules="rules"
     )
+      template(v-slot:selection="data")
+        v-chip(
+          :input-value="data.selected"
+          @click="data.select"
+        )
+          v-avatar(left size="20")
+            v-img(:src="data.item.flagLink")
+          |                   {{ data.item.name }}
+
+      template(v-slot:item="data")
+        v-list-item-avatar(size="20")
+          img(:src="data.item.flagLink")
+        v-list-item-content
+          v-list-item-title(v-html="data.item.name")
 </template>
 
 <script>
+import { common } from 'juriscloud';
+
 export default {
-  name: 'ActionText',
+  name: 'ActionState',
 
   props: {
     value: {
       type: Object,
-      required: true,
+      required: false,
     },
     config: {
       type: Object,
@@ -66,6 +82,10 @@ export default {
       if (!this.$refs.form) return;
       this.valid = this.hasContent && this.$refs.form.validate();
     },
+
+    getStateByFu(fu) {
+      return this.states.find((state) => state.fu === fu);
+    },
   },
 
   computed: {
@@ -81,12 +101,16 @@ export default {
         return this.value.content;
       },
       set(value) {
+        const state = value ? this.getStateByFu(value) : {};
         this.$emit('input', {
           ...this.value,
-          content: value,
+          content: state.fu,
+          mask: state.name,
         });
       },
     },
+
+    states: () => common.lists.states.brazil,
 
     hasContent() {
       const { message } = this;

@@ -1,6 +1,6 @@
-import uuid from 'uuid/v4';
-import { wait } from '@/helpers/promise';
-import { randomIntFromInterval } from '@/helpers/math';
+import { v4 as uuid } from 'uuid';
+import { wait } from 'juriscloud/common/helpers/promise';
+import { randomIntFromInterval } from 'juriscloud/common/helpers/math';
 import { common } from 'juriscloud';
 import * as api from '@/api';
 
@@ -11,7 +11,7 @@ const wrapAnswer = (answer) => ({
 });
 
 const calculateTypingTime = (text) => Array(text.length).fill(null)
-  .reduce((acc) => acc + randomIntFromInterval(5, 30), 0);
+  .reduce((acc) => acc + randomIntFromInterval(5, 40), 0);
 
 const emulateAnswersDelay = async (answers, commit) => {
   for (const answer of answers) {
@@ -27,13 +27,14 @@ export const initialize = async ({ commit, dispatch, getters }) => {
       const session = await api.chat.session();
       commit('fillMessageHistory', session.history);
       commit('cursorUpdated', session.currentCursor);
-      commit('requirementsUpdated', session.currentRequirements);
+      commit('configUpdated', session.currentConfig);
     }
   } catch (err) {
     if (err.response && err.response.status === 404) {
       await dispatch('sendMessage', { cursor: common.enums.chatCursors.initialize });
+    } else {
+      throw err;
     }
-    throw err;
   } finally {
     commit('initialized');
   }
@@ -42,11 +43,16 @@ export const initialize = async ({ commit, dispatch, getters }) => {
 export const sendMessage = async ({ commit }, { cursor, message }) => {
   const isInitializing = cursor === common.enums.chatCursors.initialize;
   const myMessage = { id: uuid(), ...message };
-  if (!isInitializing) commit('messageSent', myMessage);
-  const { cursor: nextCursor, answers, requirements } = await api.chat
-    .answer(cursor, myMessage);
-  if (!isInitializing) commit('messageDelivered', myMessage.id);
-  await emulateAnswersDelay(answers, commit);
-  commit('cursorUpdated', nextCursor);
-  commit('requirementsUpdated', requirements);
+  try {
+    if (!isInitializing) commit('messageSent', myMessage);
+    const { cursor: nextCursor, answers, config } = await api.chat
+      .answer(cursor, myMessage);
+    if (!isInitializing) commit('messageDelivered', myMessage.id);
+    await emulateAnswersDelay(answers, commit);
+    commit('cursorUpdated', nextCursor);
+    commit('configUpdated', config);
+  } catch (err) {
+    commit('messageFailed', { messageId: myMessage.id, error: err });
+    throw err;
+  }
 };

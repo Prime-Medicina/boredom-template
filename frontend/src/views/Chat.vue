@@ -1,7 +1,7 @@
 <template lang="pug">
   v-container#chat(fluid fill-height)
-    v-row.fill-height
-      v-col.fill-height
+    v-row.fill-height(justify-md="center")
+      v-col.fill-height(md="8")
         Chat
 </template>
 

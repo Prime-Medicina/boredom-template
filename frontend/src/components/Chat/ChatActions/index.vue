@@ -1,39 +1,82 @@
 <template lang="pug">
-  form.chat-actions
+  .chat-actions
+
+    v-progress-linear(
+      indeterminate
+      color="#b2dfdb"
+      :style="{ height: '100%' }"
+    )
 
     ActionText(
-      v-if="requirements.type === 'text'"
-      v-model="message.content"
-      :hint="requirements.hint"
+      v-if="config.type === 'text'"
+      v-model="message"
+      :config="config"
       :onSend="send"
+      :loading="loading"
+      :rules="rules"
     )
 
     ActionNumber(
-      v-if="requirements.type === 'number'"
-      v-model="message.content"
-      :hint="requirements.hint"
+      v-if="config.type === 'number'"
+      v-model="message"
+      :config="config"
       :onSend="send"
+      :loading="loading"
+      :rules="rules"
     )
 
     ActionCep(
-      v-if="requirements.type === 'cep'"
-      v-model="message.content"
-      :hint="requirements.hint"
+      v-if="config.type === 'cep'"
+      v-model="message"
+      :config="config"
       :onSend="send"
+      :loading="loading"
+      :rules="rules"
     )
 
     ActionNationality(
-      v-if="requirements.type === 'nationality'"
-      v-model="message.content"
-      :hint="requirements.hint"
+      v-if="config.type === 'nationality'"
+      v-model="message"
+      :config="config"
       :onSend="send"
+      :loading="loading"
+      :rules="rules"
     )
 
-    ActionCivilStatus(
-      v-if="requirements.type === 'civil_status'"
-      v-model="message.content"
-      :hint="requirements.hint"
+    ActionChoice(
+      v-if="config.type === 'choice'"
+      v-model="message"
+      :config="config"
       :onSend="send"
+      :loading="loading"
+      :rules="rules"
+    )
+
+    ActionCpf(
+      v-if="config.type === 'cpf'"
+      v-model="message"
+      :config="config"
+      :onSend="send"
+      :loading="loading"
+      :rules="rules"
+    )
+
+    ActionState(
+      v-if="config.type === 'state'"
+      v-model="message"
+      :config="config"
+      :onSend="send"
+      :loading="loading"
+      :rules="rules"
+    )
+
+    ActionPhone(
+      v-if="config.type === 'phone'"
+      v-model="message"
+      :config="config"
+      :onSend="send"
+      :loading="loading"
+      :rules="rules"
     )
 </template>
 
@@ -43,48 +86,76 @@ import ActionText from './ActionText.vue';
 import ActionNumber from './ActionNumber.vue';
 import ActionCep from './ActionCep.vue';
 import ActionNationality from './ActionNationality.vue';
-import ActionCivilStatus from './ActionCivilStatus.vue';
+import ActionChoice from './ActionChoice.vue';
+import ActionCpf from './ActionCpf.vue';
+import ActionState from './ActionState.vue';
+import ActionPhone from './ActionPhone.vue';
 
 export default {
   name: 'ChatActions',
 
   components: {
+    ActionCpf,
     ActionText,
     ActionNumber,
     ActionCep,
     ActionNationality,
-    ActionCivilStatus,
+    ActionChoice,
+    ActionState,
+    ActionPhone,
   },
 
   data: () => ({
     message: {
       from: 'me',
+      mask: undefined,
       content: undefined,
     },
+    loading: false,
   }),
 
   methods: {
-    send() {
+    async send() {
+      if (this.loading) return;
       const { cursor, message } = this;
-      this.$store.dispatch('chat/sendMessage', { cursor, message });
-      this.message = { from: 'me', content: undefined };
+      try {
+        this.loading = true;
+        await this.$store.dispatch('chat/sendMessage', { cursor, message });
+        this.message = { from: 'me', mask: undefined, content: undefined };
+      } finally {
+        this.loading = false;
+      }
     },
   },
 
   computed: {
-    isValidMessage() { // TODO requirements should be considered here
-      return (this.message.content || '').length > 0;
+    rules() {
+      return [
+        (value) => {
+          if (!this.config.required) return true;
+          return !!value || 'Resposta obrigatória';
+        },
+        (value) => {
+          if (!this.config.minLength) return true;
+          return (!!value && (String(value).length >= this.config.minLength)) || `O tamanho mínimo deste campo é ${this.config.minLength}`;
+        },
+        (value) => {
+          if (!this.config.maxLength) return true;
+          return (!!value && (String(value).length <= this.config.maxLength)) || `O tamanho máximo deste campo é ${this.config.maxLength}`;
+        },
+      ];
     },
+
     ...mapGetters('chat', {
       cursor: 'cursor',
-      requirements: 'requirements',
+      config: 'config',
     }),
   },
 
   watch: {
-    requirements(req) {
+    config(config) {
       // FIXME create a generic component to ask user if the suggestion is ok
-      if (req) this.message.content = req.suggestion;
+      if (config) this.message.content = config.suggestion;
     },
   },
 };
@@ -93,5 +164,6 @@ export default {
 <style scoped>
 .chat-actions {
   width: 100%;
+  min-height: 70px;
 }
 </style>

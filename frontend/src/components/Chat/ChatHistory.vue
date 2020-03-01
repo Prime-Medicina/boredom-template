@@ -6,30 +6,40 @@
       ChatMessage(:message="message" :ref="`message-${index}`")
 
     v-row(v-if="isTyping")
-      v-col(cols="9") ...
-
+      v-col(cols="9")
+        PulseLoader(:size="8" color="#b2dfdb")
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import ChatMessage from './ChatMessage/index.vue';
+import { PulseLoader } from '@saeris/vue-spinners';
+import ChatMessage from './ChatMessage.vue';
 
 export default {
   name: 'ChatHistory',
 
   components: {
     ChatMessage,
+    PulseLoader,
   },
 
   created() {
-    if (this.messages.length) this.scrollDown();
+    this.$nextTick(() => {
+      if (this.messages.length) this.scrollDown();
+    });
   },
+
+  data: () => ({
+    scrollDownTimeout: null,
+  }),
 
   methods: {
     scrollDown() {
-      setTimeout(() => {
+      if (this.scrollDownTimeout) clearTimeout(this.scrollDownTimeout);
+      this.scrollDownTimeout = setTimeout(() => {
         this.$refs.history.scrollTop = this.$refs.history.scrollHeight;
-      }, 500);
+        clearTimeout(this.scrollDownTimeout);
+      }, 400);
     },
   },
 
@@ -43,6 +53,10 @@ export default {
   watch: {
     messages() {
       this.scrollDown();
+    },
+
+    '$refs.history.scrollHeight': function hitoryScrollTopWatcher(value) {
+      console.log(value);
     },
   },
 };

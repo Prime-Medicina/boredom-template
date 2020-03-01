@@ -2,7 +2,7 @@ export const isInitialized = (state) => !!state.isInitialized;
 
 export const isTyping = (state) => !!state.isTyping;
 
-export const requirements = (state) => state.requirements || {};
+export const config = (state) => state.config || {};
 
 export const cursor = (state) => state.cursor;
 

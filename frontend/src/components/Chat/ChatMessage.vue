@@ -1,15 +1,15 @@
 <template lang="pug">
   v-row.chat-message(:class="rowClass")
-    .message-direction
-
     v-col(cols="9" :class="colStyle")
 
       v-expand-transition
         .message-box.elevation-3(:class="messageStyle" v-show="show")
           .message-content
             v-avatar(:class="avatarClass" size="30")
-             v-img(:src="avatarImage")
-            | {{ message.content }}
+              v-icon(v-if="message.failed") mdi-alert-circle
+              v-img(:src="loggedUser.profile.imageUrl" v-else-if="isMessageFromMe")
+              v-img(src="@/assets/logo.png" v-else)
+            | {{ (message.mask || message.content) }}
 </template>
 
 <script>
@@ -45,6 +45,9 @@ export default {
     },
 
     messageStyle() {
+      if (this.message.type === 'error') {
+        return 'left-message red lighten-4';
+      }
       return this.isMessageFromMe
         ? 'right-message light-blue lighten-4'
         : 'left-message teal lighten-4';
@@ -66,12 +69,6 @@ export default {
       return this.isMessageFromMe
         ? 'right-avatar'
         : 'left-avatar';
-    },
-
-    avatarImage() {
-      return this.isMessageFromMe
-        ? this.loggedUser.profile.imageUrl
-        : 'https://i.pinimg.com/736x/fd/a1/3b/fda13b9d6d88f25a9d968901d319216a.jpg';
     },
   },
 };
