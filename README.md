@@ -1,7 +1,10 @@
 # JurisCloud
 
 ## Setup
+**Make sure `bash` is available from your terminal**
 ```bash
+$ npm install serverless -g
+$ serverless login
 $ npm install
 ```
 
