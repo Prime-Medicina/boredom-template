@@ -18,12 +18,12 @@
     "deploy:production": "cross-env-shell NODE_ENV=production \"npm run deploy:backend && npm run deploy:frontend\""
   },
   "dependencies": {
-    "aws-sdk": "^2.630.0",
-    "uuid": "^7.0.1",
+    "aws-sdk": "^2.634.0",
+    "uuid": "^7.0.2",
     "juriscloud": "file:./lib"
   },
   "devDependencies": {
-    "cross-env": "^7.0.0",
+    "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.1",
@@ -32,7 +32,7 @@
     "serverless-offline": "^5.12.1",
     "serverless-pseudo-parameters": "^2.5.0",
     "serverless-webpack": "^5.3.1",
-    "webpack": "^4.41.6"
+    "webpack": "^4.42.0"
   },
   "submodules": [
     "lib",
