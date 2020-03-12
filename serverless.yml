@@ -22,7 +22,7 @@ custom:
 
 provider:
   name: aws
-  profile: rodrigogs
+  profile: juriscloud
   runtime: nodejs12.x
   stage: ${opt:stage, 'development'}
   region: sa-east-1
