@@ -1,16 +1,40 @@
-const { core: { chat: { session: sessionManager } } } = require('juriscloud');
+const { core: { chat: { sessionRepository } } } = require('juriscloud');
 const getRequestContext = require('../helpers/get-request-contex');
 const responseBuilder = require('../helpers/response-builder');
-const responseError = require('../helpers/response-error');
-const NotFoundError = require('../errors/not-found.error');
+
+const methods = {
+  async GET(ctx) {
+    try {
+      const { consumer } = ctx;
+      const session = await sessionRepository.retrieveActiveByUserId(consumer.id);
+      if (!session) return responseBuilder.errors.notFound(new Error('Session not found'));
+      return responseBuilder.success.ok({ body: session });
+    } catch (err) {
+      return responseBuilder.genericError(err);
+    }
+  },
+
+  async POST(ctx) {
+    try {
+      const {
+        pathParameters: { id: sessionId },
+        consumer: { id: userId },
+      } = ctx;
+      const session = await sessionRepository.retrieveOneByIdAndUserId(sessionId, userId);
+      if (!session) return responseBuilder.errors.notFound(new Error('Session not found'));
+      await sessionRepository.activate(session.id);
+      return responseBuilder.success.noContent();
+    } catch (err) {
+      return responseBuilder.genericError(err);
+    }
+  },
+};
 
 module.exports.handler = async (event) => {
-  try {
-    const { consumer } = await getRequestContext(event);
-    const session = await sessionManager.retrieve(consumer.id);
-    if (!session) throw new NotFoundError('Session not found');
-    return responseBuilder({ body: session });
-  } catch (err) {
-    return responseError(err);
-  }
+  const requestContext = await getRequestContext(event);
+  const method = methods[requestContext.httpMethod];
+
+  if (!method) return responseBuilder.errors.methodNotAllowed();
+
+  return method(requestContext);
 };

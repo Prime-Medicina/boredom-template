@@ -75,7 +75,8 @@ export default {
   },
 
   methods: {
-    send() {
+    send(e) {
+      if (e) e.preventDefault();
       if (!this.valid) return;
       this.onSend(this.message);
     },

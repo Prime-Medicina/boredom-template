@@ -54,10 +54,6 @@ export default {
     messages() {
       this.scrollDown();
     },
-
-    '$refs.history.scrollHeight': function hitoryScrollTopWatcher(value) {
-      console.log(value);
-    },
   },
 };
 </script>

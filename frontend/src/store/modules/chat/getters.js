@@ -6,6 +6,10 @@ export const config = (state) => state.config || {};
 
 export const cursor = (state) => state.cursor;
 
+export const section = (state) => state.section;
+
+export const subsection = (state) => state.subsection;
+
 export const allMessages = (state) => [...state.messages];
 
 export const sortedMessages = (state, getters) => {

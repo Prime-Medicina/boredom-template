@@ -8,7 +8,7 @@ const routes = [
   {
     path: '/chat',
     name: 'chat',
-    component: () => import(/* webpackChunkName: "[request]" */ '../views/Chat.vue'),
+    component: () => import(/* webpackChunkName: "Chat" */ '../views/Chat.vue'),
     meta: {
       title: 'JurisCloud',
       requiresAuth: true,
@@ -18,7 +18,7 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import(/* webpackChunkName: "[request]" */ '../views/Login.vue'),
+    component: () => import(/* webpackChunkName: "Login" */ '../views/Login.vue'),
     meta: {
       title: 'Login',
       requiresAuth: false,
@@ -28,7 +28,7 @@ const routes = [
   {
     path: '/color-palette',
     name: 'color-palette',
-    component: () => import(/* webpackChunkName: "[request]" */ '../views/ColorPalette.vue'),
+    component: () => import(/* webpackChunkName: "ColorPalette" */ '../views/ColorPalette.vue'),
     meta: {
       title: 'Paleta de Cores',
       requiresAuth: false,
@@ -38,7 +38,7 @@ const routes = [
   {
     path: '/_playground',
     name: '_playground',
-    component: () => import(/* webpackChunkName: "[request]" */ '../views/_Playground.vue'),
+    component: () => import(/* webpackChunkName: "_Playground" */ '../views/_Playground.vue'),
     meta: {
       title: 'Playground',
       requiresAuth: false,
@@ -52,7 +52,7 @@ const routes = [
   // Errors
   {
     path: '*',
-    component: () => import(/* webpackChunkName: "[request]" */ '../views/PageNotFound.vue'),
+    component: () => import(/* webpackChunkName: "PageNotFound" */ '../views/PageNotFound.vue'),
     meta: {
       title: '404',
       requiresAuth: false,

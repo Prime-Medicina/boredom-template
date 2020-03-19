@@ -27,7 +27,7 @@ module.exports = async (event) => {
   } = event;
 
   return {
-    httpMethod,
+    httpMethod: (httpMethod || '').toUpperCase(),
     headers,
     multiValueHeaders,
     queryStringParameters,

@@ -18,6 +18,14 @@ export const cursorUpdated = (state, cursor) => {
   Vue.set(state, 'cursor', cursor);
 };
 
+export const sectionUpdated = (state, section) => {
+  Vue.set(state, 'section', section);
+};
+
+export const subsectionUpdated = (state, subsection) => {
+  Vue.set(state, 'subsection', subsection);
+};
+
 export const configUpdated = (state, config) => {
   Vue.set(state, 'config', config);
 };
@@ -33,7 +41,9 @@ export const messageDelivered = (state, messageId) => {
 
 export const messageFailed = (state, { messageId, error }) => {
   const message = state.messages.find((msg) => msg.id === messageId);
-  message.failed = true;
+  if (message) {
+    message.failed = true;
+  }
   state.messages.push(wrapAnswer({
     type: 'error',
     content: 'Ocorreu um erro no servidor, tente novamente',
@@ -43,8 +53,5 @@ export const messageFailed = (state, { messageId, error }) => {
 };
 
 export const fillMessageHistory = (state, messages) => {
-  Object.keys(messages).forEach((cursor) => {
-    const cursorMessages = messages[cursor];
-    state.messages.push(...cursorMessages);
-  });
+  state.messages.push(...messages);
 };

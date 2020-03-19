@@ -25,9 +25,12 @@ export const initialize = async ({ commit, dispatch, getters }) => {
   try {
     if (!getters.isInitialized) {
       const session = await api.chat.session();
-      commit('fillMessageHistory', session.history);
-      commit('cursorUpdated', session.currentCursor);
-      commit('configUpdated', session.currentConfig);
+      const history = await api.chat.history();
+      commit('fillMessageHistory', history);
+      commit('sectionUpdated', session.section);
+      commit('subsectionUpdated', session.subsection);
+      commit('cursorUpdated', session.cursor);
+      commit('configUpdated', session.config);
     }
   } catch (err) {
     if (err.response && err.response.status === 404) {
@@ -36,19 +39,34 @@ export const initialize = async ({ commit, dispatch, getters }) => {
       throw err;
     }
   } finally {
-    commit('initialized');
+    await commit('initialized');
   }
 };
 
-export const sendMessage = async ({ commit }, { cursor, message }) => {
+export const sendMessage = async ({ commit }, {
+  cursor, section, subsection, message,
+}) => {
   const isInitializing = cursor === common.enums.chatCursors.initialize;
   const myMessage = { id: uuid(), ...message };
   try {
     if (!isInitializing) commit('messageSent', myMessage);
-    const { cursor: nextCursor, answers, config } = await api.chat
-      .answer(cursor, myMessage);
+    const {
+      nextSection,
+      nextSubsection,
+      nextCursor,
+      answers,
+      config,
+    } = await api.chat
+      .answer({
+        cursor,
+        section,
+        subsection,
+        message: myMessage,
+      });
     if (!isInitializing) commit('messageDelivered', myMessage.id);
     await emulateAnswersDelay(answers, commit);
+    commit('sectionUpdated', nextSection);
+    commit('subsectionUpdated', nextSubsection);
     commit('cursorUpdated', nextCursor);
     commit('configUpdated', config);
   } catch (err) {

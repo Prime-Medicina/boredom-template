@@ -1,5 +1,4 @@
 const responseBuilder = require('../helpers/response-builder');
-const responseError = require('../helpers/response-error');
 
 const throwError = (pathParameters) => {
   const err = new Error();
@@ -10,8 +9,8 @@ const throwError = (pathParameters) => {
 
 module.exports.handler = async (event) => {
   try {
-    return responseBuilder(throwError(event.pathParameters));
+    return responseBuilder.genericError(throwError(event.pathParameters));
   } catch (err) {
-    return responseError(err);
+    return responseBuilder.genericError(err);
   }
 };

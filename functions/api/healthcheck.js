@@ -1,5 +1,4 @@
 const responseBuilder = require('../helpers/response-builder');
-const responseError = require('../helpers/response-error');
 
 const pkg = require('../../package.json');
 
@@ -12,12 +11,12 @@ const pkg = require('../../package.json');
  */
 module.exports.handler = async () => {
   try {
-    return responseBuilder({
+    return responseBuilder.success.ok({
       body: {
         message: `${pkg.name}: ${pkg.version}`,
       },
     });
   } catch (err) {
-    return responseError(err);
+    return responseBuilder.genericError(err);
   }
 };

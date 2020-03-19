@@ -1,12 +1,6 @@
 <template lang="pug">
   .chat-actions
 
-    v-progress-linear(
-      indeterminate
-      color="#b2dfdb"
-      :style="{ height: '100%' }"
-    )
-
     ActionText(
       v-if="config.type === 'text'"
       v-model="message"
@@ -117,10 +111,14 @@ export default {
   methods: {
     async send() {
       if (this.loading) return;
-      const { cursor, message } = this;
+      const {
+        cursor, section, subsection, message,
+      } = this;
       try {
         this.loading = true;
-        await this.$store.dispatch('chat/sendMessage', { cursor, message });
+        await this.$store.dispatch('chat/sendMessage', {
+          cursor, section, subsection, message,
+        });
         this.message = { from: 'me', mask: undefined, content: undefined };
       } finally {
         this.loading = false;
@@ -148,6 +146,8 @@ export default {
 
     ...mapGetters('chat', {
       cursor: 'cursor',
+      section: 'section',
+      subsection: 'subsection',
       config: 'config',
     }),
   },

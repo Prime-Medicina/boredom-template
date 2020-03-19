@@ -5,8 +5,17 @@ export default (request) => ({
     return data;
   },
 
-  async answer(cursor, message) {
-    const { data } = await request.post('/chat', { cursor, message });
+  async history() {
+    const { data } = await request.get('/chat');
+    return data;
+  },
+
+  async answer({
+    cursor, section, subsection, message,
+  }) {
+    const { data } = await request.post('/chat', {
+      cursor, section, subsection, message,
+    });
     return data;
   },
 

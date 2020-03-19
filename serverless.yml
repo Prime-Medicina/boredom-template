@@ -18,7 +18,7 @@ custom:
     bucketName: '${self:service}-${self:provider.stage}-webapp'
     distributionFolder: 'frontend/dist'
   usersTableName: '${self:service}-${self:provider.stage}-users'
-  sessionTableName: '${self:service}-${self:provider.stage}-session'
+  sessionTableName: '${self:service}-${self:provider.stage}-sessions'
 
 provider:
   name: aws
@@ -65,6 +65,11 @@ functions:
     handler: functions/api/chat.handler
     events:
       - http:
+          method: get
+          path: /chat
+          cors: true
+          authorizer: authorizer
+      - http:
           method: post
           path: /chat
           cors: true
@@ -76,6 +81,11 @@ functions:
       - http:
           method: get
           path: /session
+          cors: true
+          authorizer: authorizer
+      - http:
+          method: post
+          path: /session/activate/{id}
           cors: true
           authorizer: authorizer
 
@@ -142,11 +152,15 @@ resources:
       Properties:
         TableName: ${self:custom.sessionTableName}
         AttributeDefinitions:
-          - AttributeName: userId
+          - AttributeName: __pk
+            AttributeType: S
+          - AttributeName: __sk
             AttributeType: S
         KeySchema:
-          - AttributeName: userId
+          - AttributeName: __pk
             KeyType: HASH
+          - AttributeName: __sk
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 10
           WriteCapacityUnits: 10
