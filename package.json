@@ -1,41 +1,25 @@
 {
-  "name": "juriscloud",
+  "name": "boredom-template",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
   "scripts": {
-    "start": "sls offline & (cd frontend && npm run serve)",
-    "start:frontend": "(cd frontend && npm run serve)",
-    "start:backend": "sls offline",
-    "postinstall": "npx submodules-install",
-    "build": "npm install && npm run build:backend && npm run build:frontend",
-    "build:frontend": "cd frontend && npm install && npm run build",
-    "build:backend": "sls webpack --out dist",
-    "deploy": "cross-env-shell NODE_ENV=development \"npm run build:frontend && npm run deploy:development\"",
-    "deploy:frontend": "sls client deploy -s ${NODE_ENV} --no-confirm",
-    "deploy:backend": "sls deploy -s ${NODE_ENV}",
-    "deploy:development": "cross-env-shell NODE_ENV=development \"npm run deploy:backend && npm run deploy:frontend\"",
-    "deploy:production": "cross-env-shell NODE_ENV=production \"npm run deploy:backend && npm run deploy:frontend\""
-  },
-  "dependencies": {
-    "aws-sdk": "^2.642.0",
-    "uuid": "^7.0.2",
-    "juriscloud": "file:./lib"
+    "wizard": "npx lerna-wizard",
+    "deploy": "lerna exec --scope sls-* sls deploy",
+    "deploy:init": "lerna exec --scope sls-resources-* sls deploy && lerna exec --scope sls--* sls deploy",
+    "deploy:resources": "lerna exec --scope sls-resources* sls deploy",
+    "deploy:api": "lerna exec --scope sls-functions-api-* sls deploy"
   },
   "devDependencies": {
-    "cross-env": "^7.0.2",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.1.0",
-    "eslint-plugin-import": "^2.20.1",
-    "serverless": "^1.66.0",
-    "serverless-finch": "^2.5.2",
-    "serverless-offline": "^5.12.1",
-    "serverless-pseudo-parameters": "^2.5.0",
-    "serverless-webpack": "^5.3.1",
-    "webpack": "^4.42.0"
-  },
-  "submodules": [
-    "lib",
-    "frontend"
-  ]
+    "@babel/core": "^7.11.5",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^26.3.0",
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "lerna": "^3.22.1",
+    "prettier": "^2.1.1",
+    "serverless": "^1.80.0",
+    "serverless-bundle": "^3.0.0"
+  }
 }
