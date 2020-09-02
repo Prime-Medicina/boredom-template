@@ -3,7 +3,7 @@ const merge = require('lodash.merge')
 const common = require('../../serverless.common')
 
 module.exports = merge(common, {
-  service: 'api',
+  service: 'resources-api',
   plugins: [
     'serverless-bundle',
     // 'serverless-domain-manager',

@@ -3,7 +3,7 @@ const merge = require('lodash.merge')
 const common = require('../../serverless.common')
 
 module.exports = merge(common, {
-  service: 'db',
+  service: 'resources-db',
   custom: {
     usersTableName: '${self:app}-${self:provider.stage}-users-table',
     rolesTableName: '${self:app}-${self:provider.stage}-roles-table',
@@ -35,7 +35,7 @@ module.exports = merge(common, {
           BillingMode: 'PAY_PER_REQUEST',
           GlobalSecondaryIndexes: [
             {
-              IndexName: 'username',
+              IndexName: 'username-index',
               KeySchema: [
                 {
                   AttributeName: 'username',

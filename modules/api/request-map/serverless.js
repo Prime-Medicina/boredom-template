@@ -3,11 +3,11 @@ const merge = require('lodash.merge')
 const common = require('../../serverless.common')
 
 module.exports = merge(common, {
-  service: 'api-user-roles',
+  service: 'api-request-map',
   plugins: ['serverless-bundle'],
   package: { individually: true },
   custom: {
-    userRolesTableName: '${self:app}-${self:provider.stage}-user-roles-table',
+    rolesTableName: '${self:app}-${self:provider.stage}-roles-table',
   },
   provider: {
     runtime: 'nodejs12.x',
@@ -29,22 +29,15 @@ module.exports = merge(common, {
       {
         Effect: 'Allow',
         Action: ['dynamodb:*'],
-        Resource:
-          'arn:aws:dynamodb:${self:custom.region}:*:table/${self:app}-${self:custom.stage}-user-roles-*',
-      },
-      {
-        Effect: 'Allow',
-        Action: ['dynamodb:GetItem'],
         Resource: [
-          'arn:aws:dynamodb:${self:custom.region}:*:table/${self:app}-${self:custom.stage}-users-*',
           'arn:aws:dynamodb:${self:custom.region}:*:table/${self:app}-${self:custom.stage}-roles-*',
+          'arn:aws:dynamodb:${self:custom.region}:*:table/${self:app}-${self:custom.stage}-request-map-*',
         ],
       },
     ],
     environment: {
-      USERS_TABLE_NAME: '${self:custom.usersTableName}',
       ROLES_TABLE_NAME: '${self:custom.rolesTableName}',
-      USER_ROLES_TABLE_NAME: '${self:custom.userRolesTableName}',
+      REQUEST_MAP_TABLE_NAME: '${self:custom.requestMapTableName}',
     },
   },
   functions: {
@@ -54,21 +47,14 @@ module.exports = merge(common, {
         {
           http: {
             method: 'get',
-            path: '/user-roles',
+            path: '/request-map',
             cors: true,
           },
         },
         {
           http: {
             method: 'get',
-            path: '/user-roles/{userId}',
-            cors: true,
-          },
-        },
-        {
-          http: {
-            method: 'get',
-            path: '/user-roles/{userId}/{roleId}',
+            path: '/request-map/{id}',
             cors: true,
           },
         },
@@ -80,7 +66,7 @@ module.exports = merge(common, {
         {
           http: {
             method: 'post',
-            path: '/user-roles',
+            path: '/request-map',
             cors: true,
           },
         },
@@ -92,7 +78,7 @@ module.exports = merge(common, {
         {
           http: {
             method: 'delete',
-            path: '/user-roles/{userId}/{roleId}',
+            path: '/request-map/{id}',
             cors: true,
           },
         },
