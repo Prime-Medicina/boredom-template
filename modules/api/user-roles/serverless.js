@@ -7,6 +7,8 @@ module.exports = merge(common, {
   plugins: ['serverless-bundle'],
   package: { individually: true },
   custom: {
+    usersTableName: '${self:app}-${self:provider.stage}-users-table',
+    rolesTableName: '${self:app}-${self:provider.stage}-roles-table',
     userRolesTableName: '${self:app}-${self:provider.stage}-user-roles-table',
   },
   provider: {

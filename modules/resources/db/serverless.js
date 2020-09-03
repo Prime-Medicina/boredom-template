@@ -101,21 +101,21 @@ module.exports = merge(common, {
           TableName: '${self:custom.requestMapTableName}',
           AttributeDefinitions: [
             {
-              AttributeName: 'roleId',
+              AttributeName: 'url',
               AttributeType: 'S',
             },
             {
-              AttributeName: 'url',
+              AttributeName: 'configAttribute',
               AttributeType: 'S',
             },
           ],
           KeySchema: [
             {
-              AttributeName: 'roleId',
+              AttributeName: 'url',
               KeyType: 'HASH',
             },
             {
-              AttributeName: 'url',
+              AttributeName: 'configAttribute',
               KeyType: 'RANGE',
             },
           ],

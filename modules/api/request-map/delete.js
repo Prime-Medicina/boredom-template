@@ -6,11 +6,12 @@ import responseBuilder from 'boredom-lib/helpers/api/response-builder'
 
 const dispatcher = async (event) => {
   const router = new Router([HTTP])
-  const requestContext = await getRequestContext(event)
-  const { pathParameters } = requestContext
+  const {
+    pathParameters: { url, configAttribute },
+  } = await getRequestContext(event)
 
-  router.http.delete(`/request-map/:id`, () =>
-    removeRequestMap(pathParameters.id).then(() => responseBuilder.success.noContent())
+  router.http.delete(`/request-map/:url/:configAttribute`, () =>
+    removeRequestMap(url, configAttribute).then(() => responseBuilder.success.noContent())
   )
 
   router.mismatch(() => {

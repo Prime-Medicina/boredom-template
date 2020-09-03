@@ -6,12 +6,11 @@ import responseBuilder from 'boredom-lib/helpers/api/response-builder'
 
 const dispatcher = async (event) => {
   const router = new Router([HTTP])
-  const requestContext = await getRequestContext(event)
-  const { body } = requestContext
+  const { body } = await getRequestContext(event)
 
   router.http.post(`/request-map`, () =>
-    createRequestMap(body).then((createdUserRole) =>
-      responseBuilder.success.created({ body: createdUserRole })
+    createRequestMap(body).then((requestMap) =>
+      responseBuilder.success.created({ body: requestMap })
     )
   )
 

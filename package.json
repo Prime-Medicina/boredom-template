@@ -5,8 +5,11 @@
     "wizard": "npx lerna-wizard",
     "deploy": "lerna exec --scope sls-* sls deploy",
     "deploy:init": "npm run deploy:resources && npm run deploy:api",
-    "deploy:resources": "lerna exec --scope sls-resources* sls deploy",
-    "deploy:api": "lerna exec --scope sls-functions-api-* sls deploy"
+    "deploy:api": "lerna exec --scope sls-api-* sls deploy",
+    "deploy:resources": "lerna exec --scope sls-resources-* sls deploy",
+    "remove": "npm run remove:api && npm run remove:resources",
+    "remove:api": "lerna exec --scope sls-api-* sls remove",
+    "remove:resources": "lerna exec --scope sls-resources-* sls remove"
   },
   "devDependencies": {
     "@babel/core": "^7.11.5",

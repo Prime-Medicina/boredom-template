@@ -7,7 +7,7 @@ module.exports = merge(common, {
   plugins: ['serverless-bundle'],
   package: { individually: true },
   custom: {
-    rolesTableName: '${self:app}-${self:provider.stage}-roles-table',
+    requestMapTableName: '${self:app}-${self:provider.stage}-request-map-table',
   },
   provider: {
     runtime: 'nodejs12.x',
@@ -29,14 +29,11 @@ module.exports = merge(common, {
       {
         Effect: 'Allow',
         Action: ['dynamodb:*'],
-        Resource: [
-          'arn:aws:dynamodb:${self:custom.region}:*:table/${self:app}-${self:custom.stage}-roles-*',
+        Resource:
           'arn:aws:dynamodb:${self:custom.region}:*:table/${self:app}-${self:custom.stage}-request-map-*',
-        ],
       },
     ],
     environment: {
-      ROLES_TABLE_NAME: '${self:custom.rolesTableName}',
       REQUEST_MAP_TABLE_NAME: '${self:custom.requestMapTableName}',
     },
   },
@@ -54,7 +51,14 @@ module.exports = merge(common, {
         {
           http: {
             method: 'get',
-            path: '/request-map/{id}',
+            path: '/request-map/{url}',
+            cors: true,
+          },
+        },
+        {
+          http: {
+            method: 'get',
+            path: '/request-map/{url}/{configAttribute}',
             cors: true,
           },
         },
@@ -78,7 +82,7 @@ module.exports = merge(common, {
         {
           http: {
             method: 'delete',
-            path: '/request-map/{id}',
+            path: '/request-map/{url}/{configAttribute}',
             cors: true,
           },
         },
