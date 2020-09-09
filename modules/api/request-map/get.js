@@ -10,20 +10,16 @@ const dispatcher = async (event) => {
   const router = new Router([HTTP])
   const {
     pathParameters: { url, configAttribute },
-    queryStringParameters: { lastKey: lastKetRaw, limit, beginsWith },
+    queryStringParameters: { lastKey: lastKeyRaw, limit },
   } = await getRequestContext(event)
-
-  const parsedLastKey = typeof lastKetRaw === 'string' ? JSON.parse(lastKetRaw) : undefined
-  const lastKey = parsedLastKey
-    ? { url: parsedLastKey.url, configAttribute: parsedLastKey.configAttribute }
-    : undefined
+  const lastKey = lastKeyRaw ? JSON.parse(Buffer.from(lastKeyRaw, 'base64').toString()) : undefined
 
   router.http.get(`/request-map`, () =>
     listRequestMap({ lastKey, limit }).then((page) => responseBuilder.success.ok({ body: page }))
   )
 
   router.http.get(`/request-map/:url`, () =>
-    listRequestMapByUrl(url, beginsWith, {
+    listRequestMapByUrl(url, {
       lastKey,
       limit,
     }).then((requestMap) => responseBuilder.success.ok({ body: requestMap }))
@@ -33,7 +29,11 @@ const dispatcher = async (event) => {
     getOneRequestMapByUrlAndConfigAttribute(url, configAttribute, {
       lastKey,
       limit,
-    }).then((requestMap) => responseBuilder.success.ok({ body: requestMap }))
+    }).then((requestMap) =>
+      requestMap
+        ? responseBuilder.success.ok({ body: requestMap })
+        : responseBuilder.errors.notFound('Request map not found')
+    )
   )
 
   router.mismatch(() => {

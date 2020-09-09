@@ -125,25 +125,33 @@ module.exports = merge(common, {
     },
     Outputs: {
       UsersTableArn: {
-        Value: '!GetAtt UsersTable.Arn',
+        Value: {
+          'Fn::GetAtt': ['UsersTable', 'Arn'],
+        },
         Export: {
           Name: '${self:custom.stage}-users-table-arn',
         },
       },
       RolesTableArn: {
-        Value: '!GetAtt UsersTable.Arn',
+        Value: {
+          'Fn::GetAtt': ['RolesTable', 'Arn'],
+        },
         Export: {
           Name: '${self:custom.stage}-roles-table-arn',
         },
       },
       UserRolesTableArn: {
-        Value: '!GetAtt UserRolesTable.Arn',
+        Value: {
+          'Fn::GetAtt': ['UserRolesTable', 'Arn'],
+        },
         Export: {
           Name: '${self:custom.stage}-user-roles-table-arn',
         },
       },
       RequestMapTableArn: {
-        Value: '!GetAtt RequestMapTable.Arn',
+        Value: {
+          'Fn::GetAtt': ['RequestMapTable', 'Arn'],
+        },
         Export: {
           Name: '${self:custom.stage}-request-map-table-arn',
         },

@@ -84,6 +84,9 @@ module.exports = merge(common, {
             method: 'put',
             path: '/users/{id}',
             cors: true,
+            authorizer: {
+              'Fn::ImportValue': '${self:custom.stage}-api-root-resource-id',
+            },
           },
         },
       ],

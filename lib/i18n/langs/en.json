@@ -1,0 +1,5 @@
+{
+  "An user with id \"{{userId}}\" already exists": "An user with id \"{{userId}}\" already exists",
+  "An user with username \"{{username}}\" already exists": "An user with username \"{{username}}\" already exists",
+  "User has no roles configured": "User has no roles configured"
+}

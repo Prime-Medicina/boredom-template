@@ -1,4 +1,4 @@
-import { authService } from 'boredom-lib/services/auth.service'
+import * as basicAuth from 'boredom-lib/services/auth/basic'
 
 const createAccessPoliciy = (user, key, methodArn) => ({
   principalId: key,
@@ -17,7 +17,7 @@ const createAccessPoliciy = (user, key, methodArn) => ({
 
 const basicAuthStrategy = async (token) => {
   const [username, password] = Buffer.from(token, 'base64').toString('utf8').split(':')
-  return authService.authorize({ username, password })
+  return basicAuth.authenticate({ username, password })
 }
 
 const signin = (type, authorizationToken) => {

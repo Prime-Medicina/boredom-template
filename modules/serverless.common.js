@@ -1,10 +1,12 @@
-// eslint-disable-next-line import/no-commonjs
+/* eslint-disable import/no-commonjs */
+const { name: rootPackageName } = require('../package.json')
+
 module.exports = {
   org: 'rodrigogs',
-  app: 'boredom-template',
+  app: rootPackageName,
   custom: {
     stage: "${opt:stage, env:STAGE, env:NODE_ENV, 'development'}",
-    region: "${opt:region, env:REGION, 'us-east-1'}",
+    region: "${opt:region, env:AWS_DEFAULT_REGION, 'us-east-1'}",
   },
   provider: {
     name: 'aws',

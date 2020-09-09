@@ -10,14 +10,8 @@ const dispatcher = async (event) => {
   const router = new Router([HTTP])
   const requestContext = await getRequestContext(event)
   const { pathParameters, queryStringParameters } = requestContext
-  const { limit } = queryStringParameters
-  const parsedLastKey =
-    typeof queryStringParameters.lastKey === 'string'
-      ? JSON.parse(queryStringParameters.lastKey)
-      : undefined
-  const lastKey = parsedLastKey
-    ? { userId: parsedLastKey.userId, roleId: parsedLastKey.roleId }
-    : undefined
+  const { limit, lastKey: lastKeyRaw } = queryStringParameters
+  const lastKey = lastKeyRaw ? JSON.parse(Buffer.from(lastKeyRaw, 'base64').toString()) : undefined
 
   router.http.get(`/user-roles`, () =>
     listUserRoles({ lastKey, limit }).then((page) => responseBuilder.success.ok({ body: page }))
@@ -31,7 +25,9 @@ const dispatcher = async (event) => {
 
   router.http.get(`/user-roles/:userId/:roleId`, () =>
     getOneUserRoleByUserIdAndRoleId(pathParameters.userId, pathParameters.roleId).then((userRole) =>
-      responseBuilder.success.ok({ body: userRole })
+      userRole
+        ? responseBuilder.success.ok({ body: userRole })
+        : responseBuilder.error.notFound('User role not found')
     )
   )
 
