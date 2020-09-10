@@ -2,6 +2,13 @@
 const merge = require('lodash.merge')
 const common = require('../../serverless.common')
 
+const authorizer = {
+  name: 'request-map-authorizer',
+  arn: {
+    'Fn::ImportValue': '${self:custom.stage}-authorizer-arn',
+  },
+}
+
 module.exports = merge(common, {
   service: 'api-request-map',
   plugins: ['serverless-bundle'],
@@ -46,6 +53,7 @@ module.exports = merge(common, {
             method: 'get',
             path: '/request-map',
             cors: true,
+            authorizer,
           },
         },
         {
@@ -53,6 +61,7 @@ module.exports = merge(common, {
             method: 'get',
             path: '/request-map/{url}',
             cors: true,
+            authorizer,
           },
         },
         {
@@ -60,6 +69,7 @@ module.exports = merge(common, {
             method: 'get',
             path: '/request-map/{url}/{configAttribute}',
             cors: true,
+            authorizer,
           },
         },
       ],
@@ -72,6 +82,7 @@ module.exports = merge(common, {
             method: 'post',
             path: '/request-map',
             cors: true,
+            authorizer,
           },
         },
       ],
@@ -84,6 +95,7 @@ module.exports = merge(common, {
             method: 'delete',
             path: '/request-map/{url}/{configAttribute}',
             cors: true,
+            authorizer,
           },
         },
       ],

@@ -2,6 +2,13 @@
 const merge = require('lodash.merge')
 const common = require('../../serverless.common')
 
+const authorizer = {
+  name: 'users-authorizer',
+  arn: {
+    'Fn::ImportValue': '${self:custom.stage}-authorizer-arn',
+  },
+}
+
 module.exports = merge(common, {
   service: 'api-users',
   plugins: ['serverless-bundle'],
@@ -46,6 +53,7 @@ module.exports = merge(common, {
             method: 'get',
             path: '/users',
             cors: true,
+            authorizer,
           },
         },
         {
@@ -53,6 +61,7 @@ module.exports = merge(common, {
             method: 'get',
             path: '/users/id/{id}',
             cors: true,
+            authorizer,
           },
         },
         {
@@ -60,6 +69,7 @@ module.exports = merge(common, {
             method: 'get',
             path: '/users/username/{username}',
             cors: true,
+            authorizer,
           },
         },
       ],
@@ -72,6 +82,7 @@ module.exports = merge(common, {
             method: 'post',
             path: '/users',
             cors: true,
+            authorizer,
           },
         },
       ],
@@ -84,9 +95,7 @@ module.exports = merge(common, {
             method: 'put',
             path: '/users/{id}',
             cors: true,
-            authorizer: {
-              'Fn::ImportValue': '${self:custom.stage}-api-root-resource-id',
-            },
+            authorizer,
           },
         },
       ],
@@ -99,6 +108,7 @@ module.exports = merge(common, {
             method: 'delete',
             path: '/users/{id}',
             cors: true,
+            authorizer,
           },
         },
       ],

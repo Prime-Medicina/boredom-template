@@ -2,6 +2,13 @@
 const merge = require('lodash.merge')
 const common = require('../../serverless.common')
 
+const authorizer = {
+  name: 'user-roles-authorizer',
+  arn: {
+    'Fn::ImportValue': '${self:custom.stage}-authorizer-arn',
+  },
+}
+
 module.exports = merge(common, {
   service: 'api-user-roles',
   plugins: ['serverless-bundle'],
@@ -58,6 +65,7 @@ module.exports = merge(common, {
             method: 'get',
             path: '/user-roles',
             cors: true,
+            authorizer,
           },
         },
         {
@@ -65,6 +73,7 @@ module.exports = merge(common, {
             method: 'get',
             path: '/user-roles/{userId}',
             cors: true,
+            authorizer,
           },
         },
         {
@@ -72,6 +81,7 @@ module.exports = merge(common, {
             method: 'get',
             path: '/user-roles/{userId}/{roleId}',
             cors: true,
+            authorizer,
           },
         },
       ],
@@ -84,6 +94,7 @@ module.exports = merge(common, {
             method: 'post',
             path: '/user-roles',
             cors: true,
+            authorizer,
           },
         },
       ],
@@ -96,6 +107,7 @@ module.exports = merge(common, {
             method: 'delete',
             path: '/user-roles/{userId}/{roleId}',
             cors: true,
+            authorizer,
           },
         },
       ],

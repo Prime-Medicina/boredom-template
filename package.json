@@ -5,7 +5,7 @@
     "wizard": "npx dotenv -- npx lerna-wizard",
     "deploy": "npx dotenv -- lerna exec --scope sls-* sls deploy",
     "deploy:init": "npx dotenv -- npm run deploy:resources && npm run deploy:api",
-    "deploy:api": "npx dotenv -- lerna exec --scope sls-api-* sls deploy",
+    "deploy:api": "npx dotenv -- lerna exec --scope sls-api-authorizer-* sls deploy ** lerna exec --scope sls-api-* sls deploy",
     "deploy:resources": "npx dotenv -- lerna exec --scope sls-resources-* sls deploy",
     "remove": "npx dotenv -- npm run remove:api && npm run remove:resources",
     "remove:api": "npx dotenv -- lerna exec --scope sls-api-* sls remove",
@@ -23,6 +23,8 @@
     "lerna": "^3.22.1",
     "prettier": "^2.1.1",
     "serverless": "^1.82.0",
-    "serverless-bundle": "^3.0.0"
+    "serverless-bundle": "^3.0.0",
+    "serverless-finch": "^2.6.0",
+    "serverless-scriptable-plugin": "^1.0.5"
   }
 }
