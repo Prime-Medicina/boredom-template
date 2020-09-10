@@ -9,18 +9,19 @@ const dispatcher = async (event) => {
   const router = new Router([HTTP])
   const requestContext = await getRequestContext(event)
   const { pathParameters, queryStringParameters } = requestContext
-  const { limit } = queryStringParameters
-  const lastKey =
-    typeof queryStringParameters.lastKey === 'string'
-      ? { id: JSON.parse(queryStringParameters.lastKey).id }
-      : undefined
+  const { limit, lastKey: lastKeyRaw } = queryStringParameters
+  const lastKey = lastKeyRaw ? JSON.parse(Buffer.from(lastKeyRaw, 'base64').toString()) : undefined
 
   router.http.get(`/roles`, () =>
     listRoles({ lastKey, limit }).then((page) => responseBuilder.success.ok({ body: page }))
   )
 
   router.http.get(`/roles/:id`, () =>
-    getOneRoleById(pathParameters.id).then((role) => responseBuilder.success.ok({ body: role }))
+    getOneRoleById(pathParameters.id).then((role) =>
+      role
+        ? responseBuilder.success.ok({ body: role })
+        : responseBuilder.errors.notFound('Role not found')
+    )
   )
 
   router.mismatch(() => {

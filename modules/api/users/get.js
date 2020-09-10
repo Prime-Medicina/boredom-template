@@ -10,23 +10,26 @@ const dispatcher = async (event) => {
   const router = new Router([HTTP])
   const requestContext = await getRequestContext(event)
   const { pathParameters, queryStringParameters } = requestContext
-  const { limit } = queryStringParameters
-  const lastKey =
-    typeof queryStringParameters.lastKey === 'string'
-      ? { id: JSON.parse(queryStringParameters.lastKey).id }
-      : undefined
+  const { limit, lastKey: lastKeyRaw } = queryStringParameters
+  const lastKey = lastKeyRaw ? JSON.parse(Buffer.from(lastKeyRaw, 'base64').toString()) : undefined
 
   router.http.get(`/users`, () =>
     listUsers({ lastKey, limit }).then((page) => responseBuilder.success.ok({ body: page }))
   )
 
   router.http.get(`/users/id/:id`, () =>
-    getOneUserById(pathParameters.id).then((user) => responseBuilder.success.ok({ body: user }))
+    getOneUserById(pathParameters.id).then((user) =>
+      user
+        ? responseBuilder.success.ok({ body: user })
+        : responseBuilder.errors.notFound('User not found')
+    )
   )
 
   router.http.get(`/users/username/:username`, () =>
     getOneUserByUsername(pathParameters.username).then((user) =>
-      responseBuilder.success.ok({ body: user })
+      user
+        ? responseBuilder.success.ok({ body: user })
+        : responseBuilder.errors.notFound('User not found')
     )
   )
 

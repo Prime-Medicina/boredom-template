@@ -7,9 +7,11 @@
     "test": "jest"
   },
   "dependencies": {
-    "aws-sdk": "^2.744.0",
+    "aws-sdk": "^2.747.0",
     "axios": "^0.20.0",
     "dynamoose": "^2.3.0",
+    "mustache": "^4.0.1",
+    "url-glob": "^1.0.3",
     "uuid": "^8.3.0"
   },
   "devDependencies": {
