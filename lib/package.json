@@ -7,7 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "aws-sdk": "^2.747.0",
+    "aws-sdk": "^2.749.0",
     "axios": "^0.20.0",
     "dynamoose": "^2.3.0",
     "mustache": "^4.0.1",

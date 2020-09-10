@@ -1,6 +1,7 @@
-/* eslint-disable import/no-commonjs, import/no-commonjs */
-const merge = require('lodash.merge')
-const common = require('../../serverless.common')
+/* eslint-disable import/no-commonjs, import/no-commonjs,no-template-curly-in-string */
+// eslint-disable-next-line import/no-extraneous-dependencies
+const merge = require('lodash.merge');
+const common = require('../../serverless.common');
 
 module.exports = merge(common, {
   service: 'resources-web',
@@ -8,7 +9,7 @@ module.exports = merge(common, {
   custom: {
     client: {
       bucketName: '${self:app}-${self:provider.stage}-webapp',
-      distributionFolder: 'build'
+      distributionFolder: 'build',
     },
     scriptHooks: {
       'after:package:createDeploymentArtifacts': [
@@ -28,4 +29,4 @@ module.exports = merge(common, {
       },
     },
   },
-})
+});
