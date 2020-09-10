@@ -4,7 +4,8 @@
   "scripts": {
     "start": "next dev",
     "build": "next build",
-    "build:start": "npm run build && next start"
+    "predeploy": "npm run build",
+    "deploy": "next export -o build"
   },
   "dependencies": {
     "next": "9.5.3",
