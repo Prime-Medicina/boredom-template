@@ -38,5 +38,5 @@ export default function Card({ href, title, description }) {
         }
       `}</style>
     </>
-  );
+  )
 }

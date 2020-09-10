@@ -1,7 +1,5 @@
-/* eslint-disable import/no-commonjs, import/no-commonjs,no-template-curly-in-string */
-// eslint-disable-next-line import/no-extraneous-dependencies
-const merge = require('lodash.merge');
-const common = require('../../serverless.common');
+const merge = require('lodash.merge')
+const common = require('../../serverless.common')
 
 module.exports = merge(common, {
   service: 'resources-web',
@@ -29,4 +27,4 @@ module.exports = merge(common, {
       },
     },
   },
-});
+})
